@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="consultaMarcoFiscalMedianoPlazo" language="groovy" pageWidth="870" pageHeight="595" orientation="Landscape" columnWidth="850" leftMargin="10" rightMargin="10" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ejercicio_1" class="java.lang.String"/>
+	<parameter name="ejercicio_2" class="java.lang.String"/>
+	<parameter name="ejercicio_3" class="java.lang.String"/>
+	<parameter name="ejercicio_4" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="ejercicio3" class="java.lang.Integer">
+		<fieldDescription><![CDATA[ejercicio3]]></fieldDescription>
+	</field>
+	<field name="ejercicio4" class="java.lang.Integer">
+		<fieldDescription><![CDATA[ejercicio4]]></fieldDescription>
+	</field>
+	<field name="fuenteFinanciamientoDesc" class="java.lang.String">
+		<fieldDescription><![CDATA[fuenteFinanciamientoDesc]]></fieldDescription>
+	</field>
+	<field name="clasificacionEconomicaDesc" class="java.lang.String">
+		<fieldDescription><![CDATA[clasificacionEconomicaDesc]]></fieldDescription>
+	</field>
+	<field name="ejercicio1" class="java.lang.Integer">
+		<fieldDescription><![CDATA[ejercicio1]]></fieldDescription>
+	</field>
+	<field name="ejercicio2" class="java.lang.Integer">
+		<fieldDescription><![CDATA[ejercicio2]]></fieldDescription>
+	</field>
+	<variable name="sumaEjercicio1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{ejercicio1}]]></variableExpression>
+	</variable>
+	<variable name="sumaEjercicio2" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{ejercicio2}]]></variableExpression>
+	</variable>
+	<variable name="sumaEjercicio3" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{ejercicio3}]]></variableExpression>
+	</variable>
+	<variable name="sumaEjercicio4" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{ejercicio4}]]></variableExpression>
+	</variable>
+	<variable name="sumaClasi1" class="java.lang.Integer" resetType="Group" resetGroup="FuenteFinanciamiento" calculation="Sum">
+		<variableExpression><![CDATA[$F{ejercicio1}]]></variableExpression>
+	</variable>
+	<variable name="sumaClasi2" class="java.lang.Integer" resetType="Group" resetGroup="FuenteFinanciamiento" calculation="Sum">
+		<variableExpression><![CDATA[$F{ejercicio2}]]></variableExpression>
+	</variable>
+	<variable name="sumaClasi3" class="java.lang.Integer" resetType="Group" resetGroup="FuenteFinanciamiento" calculation="Sum">
+		<variableExpression><![CDATA[$F{ejercicio3}]]></variableExpression>
+	</variable>
+	<variable name="sumaClasi4" class="java.lang.Integer" resetType="Group" resetGroup="FuenteFinanciamiento" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<group name="FuenteFinanciamiento">
+		<groupExpression><![CDATA[$F{fuenteFinanciamientoDesc}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<rectangle>
+					<reportElement x="1" y="0" width="849" height="20" backcolor="#CCCCCC"/>
+				</rectangle>
+				<textField>
+					<reportElement x="1" y="0" width="849" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Fuente de financiamiento: " + $F{fuenteFinanciamientoDesc}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement x="291" y="20" width="145" height="20" backcolor="#CCCCCC"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="436" y="20" width="145" height="20" backcolor="#CCCCCC"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="581" y="20" width="145" height="20" backcolor="#CCCCCC"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="726" y="20" width="124" height="20" backcolor="#CCCCCC"/>
+				</rectangle>
+				<textField>
+					<reportElement x="291" y="20" width="145" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$P{ejercicio_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="436" y="20" width="145" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$P{ejercicio_2}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="581" y="20" width="145" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$P{ejercicio_3}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="726" y="20" width="124" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$P{ejercicio_4}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement x="1" y="20" width="290" height="20" backcolor="#CCCCCC"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="1" y="20" width="290" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[Clasificación Economica]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<rectangle>
+					<reportElement x="1" y="0" width="290" height="20" backcolor="#FFFFFF"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="436" y="0" width="145" height="20" backcolor="#FFFFFF"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="291" y="0" width="145" height="20" backcolor="#FFFFFF"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="581" y="0" width="145" height="20" backcolor="#FFFFFF"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="726" y="0" width="124" height="20" backcolor="#FFFFFF"/>
+				</rectangle>
+				<textField pattern="$ #,##0">
+					<reportElement x="291" y="0" width="145" height="20"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$V{sumaClasi1} == null ? 0 : $V{sumaClasi1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="$ #,##0">
+					<reportElement x="436" y="0" width="145" height="20"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$V{sumaClasi2} == null ? 0 : $V{sumaClasi2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="$ #,##0">
+					<reportElement x="581" y="0" width="145" height="20"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$V{sumaClasi3} == null ? 0 : $V{sumaClasi3}]]></textFieldExpression>
+				</textField>
+				<textField pattern="$ #,##0">
+					<reportElement x="726" y="0" width="124" height="20"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$V{sumaClasi4} == null ? 0 : $V{sumaClasi4}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="1" y="0" width="290" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<text><![CDATA[Total por fuente de financiamiento]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="114" splitType="Stretch">
+			<staticText>
+				<reportElement x="376" y="45" width="143" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Limites Globales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="285" y="25" width="320" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estimación de techos presupuestarios]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="332" y="0" width="218" height="25"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ministerio de Hacienda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="287" y="82" width="318" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Limites Marco Fiscal De Mediano Plazo]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="1" y="0" width="290" height="20" backcolor="#FFFFFF"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="436" y="0" width="145" height="20" backcolor="#FFFFFF"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="291" y="0" width="145" height="20" backcolor="#FFFFFF"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="581" y="0" width="145" height="20" backcolor="#FFFFFF"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="726" y="0" width="124" height="20" backcolor="#FFFFFF"/>
+			</rectangle>
+			<textField>
+				<reportElement x="1" y="0" width="290" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{clasificacionEconomicaDesc}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="$ #,##0">
+				<reportElement x="291" y="0" width="145" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{ejercicio1} == null ? 0 : $F{ejercicio1}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="$ #,##0">
+				<reportElement x="436" y="0" width="145" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{ejercicio2} == null ? 0 : $F{ejercicio2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="$ #,##0">
+				<reportElement x="581" y="0" width="145" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{ejercicio3} == null ? 0 : $F{ejercicio3}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="$ #,##0">
+				<reportElement x="726" y="0" width="124" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{ejercicio4} == null ? 0 : $F{ejercicio4}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="44" splitType="Stretch">
+			<rectangle>
+				<reportElement x="726" y="0" width="124" height="20" backcolor="#FFFFFF"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="581" y="0" width="145" height="20" backcolor="#FFFFFF"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="436" y="0" width="145" height="20" backcolor="#FFFFFF"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="291" y="0" width="145" height="20" backcolor="#FFFFFF"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="0" width="290" height="20" backcolor="#FFFFFF"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="0" width="290" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="$ #,##0">
+				<reportElement x="291" y="0" width="145" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{sumaEjercicio1} == null ? 0 : $V{sumaEjercicio1}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="$ #,##0">
+				<reportElement x="436" y="0" width="145" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{sumaEjercicio2} == null ? 0 : $V{sumaEjercicio2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="$ #,##0">
+				<reportElement x="581" y="0" width="145" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{sumaEjercicio3} == null ? 0 : $V{sumaEjercicio3}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="$ #,##0">
+				<reportElement x="726" y="0" width="124" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{sumaEjercicio4} == null ? 0 : $V{sumaEjercicio4}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

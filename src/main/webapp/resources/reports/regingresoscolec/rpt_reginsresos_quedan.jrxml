@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rpt_modelo_nota" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="288"/>
+	<style name="styleborder">
+		<box>
+			<pen lineWidth="1.0"/>
+			<topPen lineWidth="1.0"/>
+			<leftPen lineWidth="1.0"/>
+			<bottomPen lineWidth="1.0"/>
+			<rightPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<parameter name="P_NIT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_NTCP" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_MONTO" class="java.math.BigDecimal" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_MONTO_T" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_FECHA_INGRESO" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_CAJA" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_NOMBRE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_NOMBRE_CAJERO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_TRANSACCION" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="P_ID_QUEDAN" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_COLECTURIA" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_DOMICILIO" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_MES_TODAY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+
+(case
+    when d.SK_AUXILIAR_TESORERIA  is not null then
+        E.AK_AXT
+    else
+        g.SK_CLAECO_ING_GAS
+
+end) CODIGO,
+
+(case
+    when d.SK_AUXILIAR_TESORERIA  is not null then
+        E.DESCRIPCION
+    else
+        g.DESCRIPCION
+
+end) DESCRIPCION,
+D.IMPORTE_PERCIBIDO IMPORTE
+from
+
+SAFI_II_FINANC.TT_INGRESOS_DETALLE d left join SAFI_II_FINANC.CT_AUXILIAR_TESORERIA e
+on
+d.SK_AUXILIAR_TESORERIA = e.SK_AUXILIAR_TESORERIA
+left join
+SAFI_II_FINANC.CI_CLAECO_ING_GAS g on g.SK_CLAECO_ING_GAS = d.SK_CLAECO_ING_GAS
+where d.SK_INGRESO =
+ $P{P_TRANSACCION}]]>
+	</queryString>
+	<field name="CODIGO" class="java.math.BigDecimal"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="IMPORTE" class="java.math.BigDecimal"/>
+	<variable name="V_TOTAL" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{IMPORTE}]]></variableExpression>
+	</variable>
+	<pageHeader>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement x="173" y="52" width="223" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(No negociable)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="94" y="26" width="360" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[QUEDAN DE NOTA DE CREDITO DEL TESORO PUBLICO  No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="157" y="0" width="239" height="26"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION GENERAL DE TESORERIA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="454" y="26" width="100" height="26"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_ID_QUEDAN}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="186" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="-182" width="346" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Queda en nuestro poder la Nota Crédito del Tesoro Público No]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="346" y="-182" width="149" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{P_NTCP}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="495" y="-182" width="59" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[a favor de]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="-162" width="132" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_NOMBRE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="132" y="-162" width="199" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[;con No. de Indentificación Tributaria NIT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="493" y="-162" width="61" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[, por un valor]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="331" y="-162" width="162" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_NIT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="-142" width="14" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="14" y="-142" width="118" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_MONTO_T}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="132" y="-142" width="245" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[DOLARES DE LOS ESTADOS UNIDOS DE AMERICA]]></text>
+			</staticText>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00" isBlankWhenNull="true">
+				<reportElement x="377" y="-142" width="116" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{P_MONTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="493" y="-142" width="61" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[, la]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="-122" width="554" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[El detalle de los pagos de las obligaciones a favor del gobierno Central con la mencionada Nota de Credito del Tesoro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="-102" width="152" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[público efectuados en Colecturía:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="152" y="-102" width="403" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_COLECTURIA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="-81" width="94" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Fecha de pago:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="94" y="-81" width="162" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_FECHA_INGRESO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="-61" width="94" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Número de Caja:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="94" y="-61" width="162" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_CAJA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="-41" width="94" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Nombre del Titular:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="94" y="-21" width="162" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_NIT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="-21" width="94" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Nit:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="94" y="-41" width="162" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_NOMBRE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="styleborder" mode="Opaque" x="121" y="7" width="256" height="14" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TIPO OBLIGACION]]></text>
+			</staticText>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement style="styleborder" x="377" y="21" width="177" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{IMPORTE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="styleborder" x="1" y="21" width="120" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CODIGO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="styleborder" x="121" y="21" width="256" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="styleborder" mode="Opaque" x="1" y="7" width="120" height="14" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NUMERO DOCUMENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="styleborder" mode="Opaque" x="377" y="7" width="177" height="14" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MONTO $]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<summary>
+		<band height="390">
+			<staticText>
+				<reportElement x="0" y="48" width="554" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[El presente Quedan no es negociable y constituye un respaldo documental que ampara al titular de la NCTP  No]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="68" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{P_NTCP}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="101" y="68" width="454" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[el ejercicio de las gestiones siguientes:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="101" y="88" width="428" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[a)  Retiro de la nueva Nota de Crédito del Tesoro Público ante la unidad de Asesoría legal de ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="101" y="108" width="428" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[la dirección General de Tesorería, si el monto del remanente es superior a cincuenta dólares]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="101" y="128" width="428" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[($50.00)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="101" y="168" width="428" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[menores o iguales a ($50.00)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="101" y="148" width="428" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[b) Solicitar ante la Dirección financiera correspondiente a la redención o pago de remanentes]]></text>
+			</staticText>
+			<textField pattern="dd">
+				<reportElement x="332" y="201" width="42" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="374" y="201" width="21" height="20"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="395" y="201" width="67" height="20"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_MES_TODAY}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="462" y="201" width="21" height="20"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="244" y="201" width="88" height="20"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[San Salvador,]]></text>
+			</staticText>
+			<textField pattern="yyyy">
+				<reportElement x="483" y="201" width="72" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="262" width="291" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_NOMBRE_CAJERO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="282" width="290" height="1"/>
+			</line>
+			<rectangle>
+				<reportElement x="291" y="242" width="257" height="147"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="292" y="320" width="47" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[FIRMA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="338" y="242" width="209" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[RECIBIDO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="291" y="302" width="47" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[DUI:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="291" y="262" width="47" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[FECHA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="291" y="282" width="47" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[NOMBRE:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="338" y="280" width="209" height="1"/>
+			</line>
+			<line>
+				<reportElement x="338" y="299" width="209" height="1"/>
+			</line>
+			<line>
+				<reportElement x="338" y="319" width="209" height="1"/>
+			</line>
+			<line>
+				<reportElement x="339" y="367" width="209" height="1"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="201" width="244" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_DOMICILIO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$###,###,##0.00;(###,###,##0.00)" isBlankWhenNull="true">
+				<reportElement x="377" y="0" width="178" height="20" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{V_TOTAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="0" width="376" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[TOTAL PAGADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="20" width="377" height="20"/>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[REMANENTE A FAVOR DEL TITULAR]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="379" y="20" width="175" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{P_MONTO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

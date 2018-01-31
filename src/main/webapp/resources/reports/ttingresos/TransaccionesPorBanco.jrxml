@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TransaccionesPorBanco" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f6454098-28f3-42b3-8921-b1631adae78c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="fechadesde" class="java.lang.String"/>
+	<parameter name="fechahasta" class="java.lang.String"/>
+	<parameter name="condicion" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="header" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+  BANCO.SK_BANCO CODIGO, BANCO.DENOMINACION_BANCO BANCO,
+  (SELECT COUNT(RECINDIREC.SK_BANCO) FROM TT_RECAUDACION_INDIRECTA RECINDIREC WHERE RECINDIREC.SK_BANCO=BANCO.SK_BANCO AND RECINDIREC.FECHA_INGRESO>=$P{fechadesde} AND RECINDIREC.FECHA_INGRESO<=$P{fechahasta}) VENTANA,
+  (SELECT COUNT(RECINDIREC.SK_BANCO) FROM TT_RECAUDACION_INDIRECTA RECINDIREC WHERE RECINDIREC.SK_BANCO=BANCO.SK_BANCO AND RECINDIREC.FECHA_INGRESO>=$P{fechadesde} AND RECINDIREC.FECHA_INGRESO<=$P{fechahasta}) ELECTRONICA,
+  ((SELECT COUNT(RECINDIREC.SK_BANCO) FROM TT_RECAUDACION_INDIRECTA RECINDIREC WHERE RECINDIREC.SK_BANCO=BANCO.SK_BANCO AND RECINDIREC.FECHA_INGRESO>=$P{fechadesde} AND RECINDIREC.FECHA_INGRESO<=$P{fechahasta}) +
+   (SELECT COUNT(RECINDIREC.SK_BANCO) FROM TT_RECAUDACION_INDIRECTA RECINDIREC WHERE RECINDIREC.SK_BANCO=BANCO.SK_BANCO AND RECINDIREC.FECHA_INGRESO>=$P{fechadesde} AND RECINDIREC.FECHA_INGRESO<=$P{fechahasta})) TOTAL
+FROM
+  CT_BANCO BANCO
+ $P!{condicion}
+ORDER BY BANCO.SK_BANCO]]>
+	</queryString>
+	<field name="CODIGO" class="java.math.BigDecimal"/>
+	<field name="BANCO" class="java.lang.String"/>
+	<field name="VENTANA" class="java.math.BigDecimal"/>
+	<field name="ELECTRONICA" class="java.math.BigDecimal"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<variable name="VENTANA_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{VENTANA}]]></variableExpression>
+	</variable>
+	<variable name="ELECTRONICA_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{ELECTRONICA}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="98" splitType="Stretch">
+			<staticText>
+				<reportElement x="249" y="18" width="100" height="20" uuid="5ead4683-a1f1-4a39-9851-bf05c5220a9e"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SAFI II]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="168" y="38" width="256" height="20" uuid="886892d1-2da5-42fe-8425-1dd7865327ff"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION GENERAL DE TESORERIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="198" y="58" width="193" height="20" uuid="05ec643e-9c1d-4699-a7fe-2ff8cea54dcc"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIVISION DE RECAUDACIONES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="185" y="78" width="217" height="20" uuid="7a07eca9-389c-4717-91ad-d1a5a09850e3"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[REPORTE TRANSACCIONES POR BANCO]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="20" width="104" height="60" uuid="684c697e-2e96-4737-8ca6-c3aec3f0c46a"/>
+				<imageExpression><![CDATA["C:\\Users\\pc home\\Downloads\\escudo sv.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="27" y="15" width="47" height="20" uuid="50e502bc-c476-418d-aa24-d9c4cb22cc20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[BANCO:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="74" y="15" width="152" height="20" uuid="89301689-3a23-41e9-b79e-610ad6dd76cf"/>
+				<textFieldExpression><![CDATA[$P{header}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="262" y="15" width="100" height="20" uuid="77e7e709-33f1-4735-abd3-93dd9374e1c3"/>
+				<textFieldExpression><![CDATA[$P{fechadesde}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="375" y="15" width="100" height="20" uuid="a2b0d6fd-bbb3-4a78-80f7-eb2b9bbe06af"/>
+				<textFieldExpression><![CDATA[$P{fechahasta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="38" splitType="Stretch">
+			<staticText>
+				<reportElement x="151" y="18" width="100" height="20" uuid="d09441e5-e8ef-4456-976d-ff896ed09750"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[BANCO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="251" y="18" width="100" height="20" uuid="0cfd3dd6-c63f-44da-abbc-21ba64a9d3b0"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[VENTANA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="51" y="18" width="100" height="20" uuid="882b622c-3302-41fc-b4be-88f462d03571"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CODIGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="18" width="100" height="20" uuid="0f59cdda-a3ea-4f1b-a063-86dd25fe7b18"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ELECTRONICA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="451" y="18" width="100" height="20" uuid="f05efbc1-6b02-40c1-b700-21a76b832f04"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<line>
+				<reportElement x="13" y="34" width="549" height="1" uuid="6b4b7e00-dbfe-4e79-910d-fba1f43290bb"/>
+			</line>
+			<line>
+				<reportElement x="13" y="13" width="549" height="1" uuid="3c06f50b-e5dd-45aa-b111-b7280f558308"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField>
+				<reportElement x="151" y="0" width="100" height="20" uuid="5207b8e8-6f97-4ab2-9d14-e31ea59039b3"/>
+				<textFieldExpression><![CDATA[$F{BANCO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="251" y="0" width="100" height="20" uuid="a5b8c7d1-3d12-4398-a714-0f0246591cce"/>
+				<textFieldExpression><![CDATA[$F{VENTANA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="51" y="0" width="100" height="20" uuid="5c851817-071a-4e0a-8b93-43679af68103"/>
+				<textFieldExpression><![CDATA[$F{CODIGO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="351" y="0" width="100" height="20" uuid="a6d0957d-69a5-49b3-9a25-930b66c96020"/>
+				<textFieldExpression><![CDATA[$F{ELECTRONICA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="451" y="0" width="100" height="20" uuid="ef0c7851-4a5f-4154-b032-3d4115da5553"/>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="31" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="249" y="12" width="100" height="20" uuid="f3a3023e-85c3-40c4-bf00-91a8f95d149e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{VENTANA_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="349" y="12" width="100" height="20" uuid="35fee26c-db06-43bf-b4df-586d7b0d7110"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{ELECTRONICA_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="451" y="12" width="100" height="20" uuid="b50a39ef-2f76-492b-b182-949569dd86f9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="136" y="12" width="100" height="20" uuid="1ad979f9-248c-4913-9156-ab111d8469d6"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<line>
+				<reportElement x="13" y="11" width="549" height="1" uuid="6775e891-1fc4-42ea-ab9d-3193eb025acf"/>
+			</line>
+			<line>
+				<reportElement x="13" y="32" width="549" height="1" uuid="250042db-e92e-42e1-9fcf-3a70bf00e723"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

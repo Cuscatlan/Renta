@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteTransaccionesPorSucursal" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9bc45d3a-0028-4504-a0fe-7491fe5f76f8">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="condicion" class="java.lang.String"/>
+	<parameter name="fechadesde" class="java.lang.String"/>
+	<parameter name="fechahasta" class="java.lang.String"/>
+	<parameter name="header" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+  SUCURSAL.SK_SUCURSAL CODIGO, SUCURSAL.DENOMINACION_SUCURSAL SUCURSAL,
+  (SELECT COUNT(RECINDIREC.SK_SUCURSAL) FROM TT_RECAUDACION_INDIRECTA RECINDIREC WHERE RECINDIREC.SK_SUCURSAL=SUCURSAL.SK_SUCURSAL AND RECINDIREC.SK_BANCO=$P{condicion} AND RECINDIREC.FECHA_INGRESO>=$P{fechadesde} AND RECINDIREC.FECHA_INGRESO<=$P{fechahasta}) VENTANA,
+  (SELECT COUNT(RECINDIREC.SK_SUCURSAL) FROM TT_RECAUDACION_INDIRECTA RECINDIREC WHERE RECINDIREC.SK_SUCURSAL=SUCURSAL.SK_SUCURSAL AND RECINDIREC.SK_BANCO=$P{condicion} AND RECINDIREC.FECHA_INGRESO>=$P{fechadesde} AND RECINDIREC.FECHA_INGRESO<=$P{fechahasta}) ELECTRONICA,
+  (SELECT COUNT(RECINDIREC.SK_SUCURSAL) FROM TT_RECAUDACION_INDIRECTA RECINDIREC WHERE RECINDIREC.SK_SUCURSAL=SUCURSAL.SK_SUCURSAL AND RECINDIREC.SK_BANCO=$P{condicion} AND RECINDIREC.FECHA_INGRESO>=$P{fechadesde} AND RECINDIREC.FECHA_INGRESO<=$P{fechahasta}) +
+  (SELECT COUNT(RECINDIREC.SK_SUCURSAL) FROM TT_RECAUDACION_INDIRECTA RECINDIREC WHERE RECINDIREC.SK_SUCURSAL=SUCURSAL.SK_SUCURSAL AND RECINDIREC.SK_BANCO=$P{condicion} AND RECINDIREC.FECHA_INGRESO>=$P{fechadesde} AND RECINDIREC.FECHA_INGRESO<=$P{fechahasta}) TOTAL
+FROM
+  CT_SUCURSAL SUCURSAL
+ORDER BY SUCURSAL.SK_SUCURSAL]]>
+	</queryString>
+	<field name="CODIGO" class="java.math.BigDecimal"/>
+	<field name="SUCURSAL" class="java.lang.String"/>
+	<field name="VENTANA" class="java.math.BigDecimal"/>
+	<field name="ELECTRONICA" class="java.math.BigDecimal"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<variable name="VENTANA_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{VENTANA}]]></variableExpression>
+	</variable>
+	<variable name="ELECTRONICA_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{ELECTRONICA}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="96" splitType="Stretch">
+			<staticText>
+				<reportElement x="259" y="15" width="100" height="20" uuid="54c2ca42-0812-4bb3-908d-86fd7c5c482c"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SAFI II]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="189" y="75" width="239" height="20" uuid="201cbff8-0750-442d-95ff-0d04d9103b53"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[REPORTE TRANSACCIONES POR SUCURSAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="35" width="256" height="20" uuid="fb1711ba-7bbb-48ea-8294-dfe15e422b3e"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION GENERAL DE TESORERIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="209" y="55" width="193" height="20" uuid="c0d75b9b-ea53-4684-9b59-57d81852ad86"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIVISION DE RECAUDACIONES]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="-158" y="-8" width="104" height="60" uuid="e60d035a-ae5a-40d1-bc8f-f0db8f40e3af"/>
+				<imageExpression><![CDATA["C:\\Users\\pc home\\Downloads\\escudo sv.jpg"]]></imageExpression>
+			</image>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="20" y="15" width="104" height="60" uuid="3dc4002c-7658-4408-a7dc-63a91b3447a9"/>
+				<imageExpression><![CDATA["C:\\Users\\pc home\\Downloads\\escudo sv.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="39" y="15" width="47" height="20" uuid="69af9507-be26-475a-a66c-b585fe03d3ce"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[BANCO:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="89" y="15" width="148" height="20" uuid="c00bda60-2ae0-4cde-9f6f-220e81a59964"/>
+				<textFieldExpression><![CDATA[$P{header}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="277" y="15" width="100" height="20" uuid="9b6c8db0-6064-4006-9581-700cdfc12563"/>
+				<textFieldExpression><![CDATA[$P{fechadesde}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="402" y="15" width="100" height="20" uuid="3229b84b-9717-4e0d-b038-de301d915793"/>
+				<textFieldExpression><![CDATA[$P{fechahasta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="44" splitType="Stretch">
+			<staticText>
+				<reportElement x="51" y="24" width="100" height="20" uuid="7d09ea9f-c5e2-4bd1-8520-761544c89e24"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CODIGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="151" y="24" width="100" height="20" uuid="f70b515d-c366-4168-a363-1b5a6ff6a80b"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUCURSAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="251" y="24" width="100" height="20" uuid="bc399d6d-626f-4dfe-a27c-07328238336c"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[VENTANA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="24" width="100" height="20" uuid="bbc9cfed-2d8c-4b33-89b4-d62c2279f367"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ELECTRONICA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="451" y="24" width="100" height="20" uuid="24b0143a-38e8-444f-a6a6-993446136688"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<line>
+				<reportElement x="13" y="40" width="549" height="1" uuid="852f6e18-2cd4-4f38-865b-475c97c5b474"/>
+			</line>
+			<line>
+				<reportElement x="13" y="21" width="549" height="1" uuid="1e4a8e45-846f-4e3a-ae5e-87ec82f98429"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField>
+				<reportElement x="51" y="1" width="100" height="20" uuid="9ad8d235-9fd2-4fe3-ae6d-95a7735af4e9"/>
+				<textFieldExpression><![CDATA[$F{CODIGO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="151" y="1" width="100" height="20" uuid="66c89941-414b-4d47-a0b8-3e3e01d0f15c"/>
+				<textFieldExpression><![CDATA[$F{SUCURSAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="251" y="1" width="100" height="20" uuid="3fd657a9-3f30-4a8c-8be3-df5b42984efb"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{VENTANA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="351" y="1" width="100" height="20" uuid="8e56a02e-c145-41a3-909b-c7491d505d07"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{ELECTRONICA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="451" y="1" width="100" height="20" uuid="96ab9cef-514f-4e10-9fda-b7bb26d055d4"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="251" y="10" width="100" height="20" uuid="c978f8de-2ebb-4474-9cb2-8126e993ba14"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{VENTANA_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="351" y="11" width="100" height="20" uuid="bce7a6ac-38f0-490e-9c3b-348cdd97808e"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{ELECTRONICA_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="451" y="11" width="100" height="20" uuid="53ebb4d2-fc64-4252-aab9-d96c677d7867"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="151" y="11" width="100" height="20" uuid="018aa37a-4080-4aa9-91bd-a9d950c58b14"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<line>
+				<reportElement x="13" y="2" width="549" height="1" uuid="0bd1cac6-866b-495f-bc65-f1d162c1af4c"/>
+			</line>
+			<line>
+				<reportElement x="13" y="35" width="549" height="1" uuid="886b54c8-13f8-453b-8aad-51a2f4a23f9c"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

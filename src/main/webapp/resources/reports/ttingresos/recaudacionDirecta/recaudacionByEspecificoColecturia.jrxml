@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recaudacionByEspecificoColecturia" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="95"/>
+	<parameter name="fechadesde" class="java.lang.String"/>
+	<parameter name="fechahasta" class="java.lang.String"/>
+	<parameter name="condicion" class="java.lang.String"/>
+	<parameter name="skciclaecoinggas" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT ESPECIFICOS.SK_CLAECO_ING_GAS SK_CLAECO_ING_GAS, ESPECIFICOS.SK_COLECTURIA, ESPECIFICOS.NOMBRE_COLECTURIA, CIFTEFIN.DESCRIPCION, ESPECIFICOS.CAJA,
+  ESPECIFICOS.NUMERO_INGRESO, ESPECIFICOS.ESPECIFICO, ESPECIFICOS.EFECTIVO, ESPECIFICOS.TARJETA_CREDITO,
+  ESPECIFICOS.NOTA_CREDITO, ESPECIFICOS.CHEQUES_PROPIOS, ESPECIFICOS.ATF, ESPECIFICOS.TOTAL
+FROM
+(
+SELECT SK_CLAECO_ING_GAS,
+  SK_COLECTURIA,
+  (SELECT COLFIN.DENOMINACION_COLECTURIA FROM CT_COLECTURIAS_FINALES COLFIN WHERE COLFIN.SK_COLECTURIAS_FINALES=SK_COLECTURIA) NOMBRE_COLECTURIA,
+  SK_FUENTE_FINANC,
+  CAJA,
+   nvl(NUMERO_INGRESO, 0) NUMERO_INGRESO,
+   ESPECIFICO,
+    nvl(EFECTIVO,0) EFECTIVO,
+    nvl(TARJETA_CREDITO,0) TARJETA_CREDITO,
+    nvl(NOTA_CREDITO,0) NOTA_CREDITO,
+    nvl(CHEQUES_PROPIOS,0) CHEQUES_PROPIOS,
+    nvl(ATF,0) ATF,
+    nvl(nvl(EFECTIVO,0)+nvl(TARJETA_CREDITO,0)+nvl(NOTA_CREDITO,0)+nvl(CHEQUES_PROPIOS,0)+ nvl(ATF,0), 0) TOTAL
+FROM ( SELECT DET.SK_CLAECO_ING_GAS AS SK_CLAECO_ING_GAS, ING.SK_INGRESO AS NUMERO_INGRESO,CLA.CLAECO_ING_GAS AS ESPECIFICO, MEDP.DESCRIPCION ,SUM(DIS.MONTO) as monto, ING.SK_COLECTURIA_FINAL AS SK_COLECTURIA, ING.SK_FUENTE_FINANC AS SK_FUENTE_FINANC, ING.CAJA AS CAJA
+      from TT_INGRESOS ING, TT_DIST_DET_MEDP DIS, TT_INGRESOS_DETALLE DET, CT_MEDIO_PERCEPCION MEDP,
+        CI_CLAECO_ING_GAS CLA
+         WHERE ING.SK_INGRESO = DET.SK_INGRESO
+         AND MEDP.SK_MEDIO_PERCEPCION = DIS.SK_MEDIO_PERCEPCION
+         AND DET.SK_INGRESO_DETALLE = DIS.SK_INGRESO_DETALLE
+         AND CLA.SK_CLAECO_ING_GAS = DET.SK_CLAECO_ING_GAS
+         AND ING.SK_COLECTURIA_FINAL=$P{condicion}
+         AND ING.FECHA_INGRESO>=$P{fechadesde}
+         AND ING.FECHA_INGRESO<=$P{fechahasta}
+
+      GROUP BY ING.SK_INGRESO, CLA.CLAECO_ING_GAS, MEDP.DESCRIPCION, ING.SK_COLECTURIA_FINAL, ING.SK_FUENTE_FINANC, ING.CAJA, DET.SK_CLAECO_ING_GAS )
+  PIVOT ( SUM(monto) FOR DESCRIPCION IN ('Efectivo' EFECTIVO, 'Tarjeta Credito' TARJETA_CREDITO, 'Nota de Credito' NOTA_CREDITO, 'Cheques Propios' CHEQUES_PROPIOS, 'Atf' ATF ))
+) ESPECIFICOS JOIN CI_FUENTE_FINANC CIFTEFIN ON ESPECIFICOS.SK_FUENTE_FINANC=CIFTEFIN.SK_FUENTE_FINANC
+$P!{skciclaecoinggas}
+ORDER BY NUMERO_INGRESO, ESPECIFICO]]>
+	</queryString>
+	<field name="SK_CLAECO_ING_GAS" class="java.math.BigDecimal"/>
+	<field name="SK_COLECTURIA" class="java.math.BigDecimal"/>
+	<field name="NOMBRE_COLECTURIA" class="java.lang.String"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="CAJA" class="java.math.BigDecimal"/>
+	<field name="NUMERO_INGRESO" class="java.math.BigDecimal"/>
+	<field name="ESPECIFICO" class="java.lang.String"/>
+	<field name="EFECTIVO" class="java.math.BigDecimal"/>
+	<field name="TARJETA_CREDITO" class="java.math.BigDecimal"/>
+	<field name="NOTA_CREDITO" class="java.math.BigDecimal"/>
+	<field name="CHEQUES_PROPIOS" class="java.math.BigDecimal"/>
+	<field name="ATF" class="java.math.BigDecimal"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<variable name="EFECTIVO_1" class="java.math.BigDecimal" resetType="Group" resetGroup="byCajaDetail" calculation="Sum">
+		<variableExpression><![CDATA[$F{EFECTIVO}]]></variableExpression>
+	</variable>
+	<variable name="TARJETA_CREDITO_1" class="java.math.BigDecimal" resetType="Group" resetGroup="byCajaDetail" calculation="Sum">
+		<variableExpression><![CDATA[$F{TARJETA_CREDITO}]]></variableExpression>
+	</variable>
+	<variable name="NOTA_CREDITO_1" class="java.math.BigDecimal" resetType="Group" resetGroup="byCajaDetail" calculation="Sum">
+		<variableExpression><![CDATA[$F{NOTA_CREDITO}]]></variableExpression>
+	</variable>
+	<variable name="CHEQUES_PROPIOS_1" class="java.math.BigDecimal" resetType="Group" resetGroup="byCajaDetail" calculation="Sum">
+		<variableExpression><![CDATA[$F{CHEQUES_PROPIOS}]]></variableExpression>
+	</variable>
+	<variable name="ATF_1" class="java.math.BigDecimal" resetType="Group" resetGroup="byCajaDetail" calculation="Sum">
+		<variableExpression><![CDATA[$F{ATF}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_1" class="java.math.BigDecimal" resetType="Group" resetGroup="byCajaDetail" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+	</variable>
+	<variable name="EFECTIVO_2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{EFECTIVO}]]></variableExpression>
+	</variable>
+	<variable name="TARJETA_CREDITO_2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{TARJETA_CREDITO}]]></variableExpression>
+	</variable>
+	<variable name="NOTA_CREDITO_2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{NOTA_CREDITO}]]></variableExpression>
+	</variable>
+	<variable name="CHEQUES_PROPIOS_2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{CHEQUES_PROPIOS}]]></variableExpression>
+	</variable>
+	<variable name="ATF_2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{ATF}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+	</variable>
+	<group name="byCajaDetail">
+		<groupExpression><![CDATA[$F{CAJA}]]></groupExpression>
+		<groupHeader>
+			<band height="4"/>
+		</groupHeader>
+		<groupFooter>
+			<band height="40">
+				<textField>
+					<reportElement x="432" y="10" width="50" height="20"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{EFECTIVO_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="482" y="10" width="50" height="20"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{TARJETA_CREDITO_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="532" y="10" width="50" height="20"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{NOTA_CREDITO_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="582" y="10" width="50" height="20"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{CHEQUES_PROPIOS_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="632" y="10" width="50" height="20"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{ATF_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="682" y="10" width="70" height="20"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{TOTAL_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="369" y="10" width="57" height="20"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[SubTotal:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="432" y="6" width="320" height="1"/>
+				</line>
+				<line>
+					<reportElement x="432" y="27" width="320" height="1"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="91" splitType="Stretch">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="3" width="85" height="65"/>
+				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\pc home\\Downloads\\escudo sv.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="235" y="30" width="316" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SISTEMA DE ADMINISTRACION FINANCIERA INTEGRADA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="284" y="70" width="25" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DEL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="316" y="10" width="171" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINISTERIO DE HACIENDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="444" y="70" width="16" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[AL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="301" y="50" width="188" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE RECAUDACION]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="309" y="70" width="100" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{fechadesde}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="70" width="100" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{fechahasta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="10" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement x="15" y="16" width="47" height="20"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Codigo Colecturia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="62" y="16" width="100" height="20"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre Colecturia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="162" y="16" width="100" height="20"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fondo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="262" y="16" width="43" height="20"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Caja]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="305" y="16" width="64" height="20"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ingreso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="369" y="16" width="63" height="20"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Especifico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="432" y="16" width="50" height="20"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Efectivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="482" y="16" width="50" height="20"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tarjeta Credito]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="532" y="16" width="50" height="20"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nota Credito]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="582" y="16" width="50" height="20"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cheques Propios]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="632" y="16" width="50" height="20"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ATF]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="682" y="16" width="50" height="20"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="38" width="752" height="1"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="0" y="5" width="752" height="1"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="15" y="0" width="47" height="20"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{SK_COLECTURIA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="62" y="0" width="100" height="20"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NOMBRE_COLECTURIA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="162" y="0" width="100" height="20"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="262" y="0" width="43" height="20"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CAJA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="0" width="64" height="20"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{NUMERO_INGRESO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="369" y="0" width="63" height="20"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ESPECIFICO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="432" y="0" width="50" height="20"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{EFECTIVO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="482" y="0" width="50" height="20"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{TARJETA_CREDITO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="532" y="0" width="50" height="20"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{NOTA_CREDITO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="582" y="0" width="50" height="20"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CHEQUES_PROPIOS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="632" y="0" width="50" height="20"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ATF}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="682" y="0" width="50" height="20"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="432" y="11" width="50" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{EFECTIVO_2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="482" y="11" width="50" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{TARJETA_CREDITO_2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="532" y="11" width="50" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{NOTA_CREDITO_2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="582" y="11" width="50" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{CHEQUES_PROPIOS_2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="632" y="11" width="50" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{ATF_2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="682" y="11" width="70" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{TOTAL_2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="369" y="11" width="59" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Totales:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="5" width="752" height="1"/>
+			</line>
+			<line>
+				<reportElement x="0" y="30" width="752" height="1"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

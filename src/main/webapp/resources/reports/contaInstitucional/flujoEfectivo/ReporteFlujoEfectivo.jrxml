@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteFlujoEfectivo" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fbd21631-fd72-4dd0-b6a3-bec883cdc648">
+	<property name="ireport.zoom" value="0.9090909090909091"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="328"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Mramosl\\Desktop\\mramos_fpemp\\Fpemp_reports\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="total_IDneedc" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="totalInicioEjer" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select 1 from dual]]>
+	</queryString>
+	<field name="1" class="java.math.BigDecimal"/>
+	<variable name="year" class="java.lang.String">
+		<initialValueExpression><![CDATA[new SimpleDateFormat("yyyy").format(new Date())]]></initialValueExpression>
+	</variable>
+	<variable name="year-1" class="java.lang.String">
+		<initialValueExpression><![CDATA[Calendar.getInstance().get(Calendar.YEAR)-1]]></initialValueExpression>
+	</variable>
+	<variable name="total" class="java.math.BigDecimal" calculation="Sum"/>
+	<variable name="total_pagos" class="java.math.BigDecimal" calculation="Sum"/>
+	<variable name="ida" class="java.lang.String"/>
+	<variable name="totalCobroOp" class="java.math.BigDecimal" calculation="Sum"/>
+	<variable name="totalPagoOp" class="java.math.BigDecimal" calculation="Sum"/>
+	<variable name="totalCobroInv" class="java.math.BigDecimal" calculation="Sum"/>
+	<variable name="totalCobroFin" class="java.math.BigDecimal" calculation="Sum"/>
+	<variable name="totalPagoInv" class="java.math.BigDecimal" calculation="Sum"/>
+	<variable name="totalPagoFin" class="java.math.BigDecimal" calculation="Sum"/>
+	<variable name="totalFinalEjer" class="java.math.BigDecimal"/>
+	<group name="CODIGO">
+		<groupExpression><![CDATA[]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="41" splitType="Stretch">
+			<textField>
+				<reportElement x="282" y="0" width="326" height="20" uuid="9723d491-3edc-45e2-bdd2-1888dbae983a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["DENOMINACIÓN DE LA ENTIDAD ESTADO FLUJO DE EFECTIVO"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="306" y="20" width="325" height="20" uuid="f8c43278-a47f-4f6a-aa2b-ca51661286c4"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" Del 1° de Enero de "+$V{year}+" al 31 de Diciembre de "+$V{year}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="444">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="152" width="802" height="49" uuid="d9c6a932-a567-4a82-9376-b33651a0a3a8"/>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="totalCobros" toVariable="totalCobroInv" calculation="Sum"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "FlujoEfectivovCobrosInv.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="308" width="802" height="47" uuid="89abaaaf-ca9a-46c0-9542-813731f215c6"/>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="totalCobros" toVariable="totalCobroFin" calculation="Sum"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "FlujoEfectivovCobrosFinan.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="13" width="802" height="41" uuid="1d8db954-025e-40b1-831e-f68793efc919"/>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="totalCobros" toVariable="totalCobroOp" calculation="Sum"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "FlujoEfectivovCobrosOp.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="54" width="802" height="39" uuid="d01a388f-8282-44ac-b95c-97518166bcc0"/>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="total" toVariable="totalPagoOp" calculation="Sum"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "FlujoEfectivovPagosOP.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="201" width="802" height="41" uuid="24034f20-d16a-4def-853d-6698d5442bfc"/>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="total" toVariable="totalPagoInv" calculation="Sum"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "FlujoEfectivovPagosInv.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="355" width="802" height="50" uuid="6fc07ace-a848-4b84-8c5c-c5d2d18960b4"/>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="total" toVariable="totalPagoFin" calculation="Sum"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "FlujoEfectivovPagosFinan.jasper"]]></subreportExpression>
+			</subreport>
+			<textField evaluationTime="Band" pattern="$ #,##0.00">
+				<reportElement positionType="Float" mode="Opaque" x="687" y="113" width="104" height="20" backcolor="#CCCCCC" uuid="6ae53f36-f8a4-4fbc-9349-bc32cf856127"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalCobroOp}-$V{totalPagoOp}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="113" width="687" height="20" backcolor="#CCCCCC" uuid="bc1567e2-3654-4a22-9776-cf2e84abfdcf"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Flujos netos  de efectivo por  actividades de operación: ]]></text>
+			</staticText>
+			<textField evaluationTime="Band" pattern="$ #,##0.00">
+				<reportElement positionType="Float" mode="Opaque" x="687" y="271" width="104" height="20" backcolor="#CCCCCC" uuid="50e2b052-bfd8-47b8-955f-305b230e44a6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalCobroInv}-$V{totalPagoInv}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="271" width="687" height="20" backcolor="#CCCCCC" uuid="7251a42b-d7f3-46d0-8c90-dda1bcffcb6f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Flujos netos  de efectivo por  actividades de inversión: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="424" width="687" height="20" backcolor="#CCCCCC" uuid="703c5d21-581c-423a-b1ea-9c19438af6f9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Flujos netos  de efectivo por  actividades de financiación: ]]></text>
+			</staticText>
+			<textField evaluationTime="Band" pattern="$ #,##0.00">
+				<reportElement positionType="Float" mode="Opaque" x="687" y="424" width="104" height="20" backcolor="#CCCCCC" uuid="4cd14106-2c09-4f19-b053-ea0fc138e548"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalCobroFin}-$V{totalPagoFin}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="206" splitType="Stretch">
+			<textField>
+				<reportElement x="14" y="66" width="474" height="34" uuid="1a2c2833-60c9-4e79-a2d9-c0e6e0b447f5"/>
+				<textElement markup="styled">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Incremento/Disminución neta de efectivo y equivalentes de efectivo"+"\n"+"por diferencias de cambio no realizadas"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="14" y="20" width="656" height="20" uuid="2f13c28c-bd0c-4d87-b7be-3885815634c8"/>
+				<textElement markup="styled">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Incremento/Disminución neta de efectivo y equivalentes de efectivo"+"\n"+"por flujos de actividades:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="14" y="129" width="474" height="20" uuid="d7cc0c7b-6f6d-4170-8e9b-f07bb0d035f9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Efectivo y equivalentes al efectivo al inicio del ejercicio:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="14" y="179" width="474" height="20" uuid="83533e02-09b6-4f14-a383-a01bdca1c23b"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Efectivo y equivalentes al efectivo al final del ejercicio:"]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00">
+				<reportElement x="687" y="20" width="100" height="20" uuid="c9fce366-6100-44f1-a087-7b4d49aedc7d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{totalCobroOp}-$V{totalPagoOp})+($V{totalCobroInv}-$V{totalPagoInv})+($V{totalCobroFin}-$V{totalPagoFin})]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="670" y="20" width="128" height="1" uuid="a91db966-2f54-4dd6-b509-b15901dfd801"/>
+			</line>
+			<line>
+				<reportElement x="670" y="40" width="128" height="1" uuid="87a73c88-ad81-4e95-bcda-67da14aefb71"/>
+			</line>
+			<textField pattern="$ #,##0.00">
+				<reportElement x="687" y="66" width="100" height="20" uuid="79f0ed7e-460c-4872-b0b0-01dac3610759"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{total_IDneedc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00">
+				<reportElement x="687" y="179" width="100" height="20" uuid="24b5549b-319a-4b12-ae38-52d8a6660347"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{total_IDneedc}+(($V{totalCobroOp}-$V{totalPagoOp})+($V{totalCobroInv}-$V{totalPagoInv})+($V{totalCobroFin}-$V{totalPagoFin}))+$P{totalInicioEjer}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00">
+				<reportElement x="687" y="129" width="100" height="20" uuid="0a960fd6-6b71-45d1-80a6-25e33a1fb8c3"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{totalInicioEjer}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="670" y="179" width="128" height="1" uuid="2a554b8b-db3d-4a02-aae3-e9082c72d65d"/>
+			</line>
+			<line>
+				<reportElement x="670" y="199" width="128" height="1" uuid="48c7d718-45f6-480d-877d-e4a869e5459b"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

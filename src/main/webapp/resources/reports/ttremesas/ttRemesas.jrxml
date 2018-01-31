@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ttRemesas" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="48"/>
+	<parameter name="SKREMESA" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT NUM_REMESA
+, (SELECT COLECTURIA.DENOMINACION_COLECTURIA FROM CT_COLECTURIAS_FINALES COLECTURIA WHERE SK_COLECTURIAS_FINALES = SK_COLECTURIA_FINAL) COLECTURIA_FINAL
+, NUM_CAJA
+, (SELECT NUMERO_CUENTA FROM CT_CUENTAS_OPERATIVAS CUENTA WHERE CUENTA.SK_CUENTAS_OPERATIVAS = REMESAS.SK_CUENTA_OPERATIVA) CUENTA_OPERATIVA
+, (SELECT DENOMINACION_BANCO FROM CT_BANCO BANCO WHERE BANCO.SK_BANCO = (SELECT SK_BANCO FROM CT_CUENTAS_OPERATIVAS CUENTA WHERE CUENTA.SK_CUENTAS_OPERATIVAS = REMESAS.SK_CUENTA_OPERATIVA)) BANCO
+, FECHA_INGRESO
+, FECHA_REMISION
+, NVL(BOLSA, '') BOLSA
+, BILLETE_100
+, (SELECT BILLETE_100*100 FROM TT_REMESAS REMESA100 WHERE REMESA100.SK_REMESA = REMESAS.SK_REMESA) VALOR100
+, BILLETE_50
+, (SELECT BILLETE_50*50 FROM TT_REMESAS REMESA50 WHERE REMESA50.SK_REMESA = REMESAS.SK_REMESA) VALOR50
+, BILLETE_20
+, (SELECT BILLETE_20*20 FROM TT_REMESAS REMESA20 WHERE REMESA20.SK_REMESA = REMESAS.SK_REMESA) VALOR20
+, BILLETE_10
+, (SELECT BILLETE_10*10 FROM TT_REMESAS REMESA10 WHERE REMESA10.SK_REMESA = REMESAS.SK_REMESA) VALOR10
+, BILLETE_5
+, (SELECT BILLETE_5*5 FROM TT_REMESAS REMESA5 WHERE REMESA5.SK_REMESA = REMESAS.SK_REMESA) VALOR5
+, BILLETE_1
+, (SELECT BILLETE_1*1 FROM TT_REMESAS REMESA1 WHERE REMESA1.SK_REMESA = REMESAS.SK_REMESA) VALOR1
+, MONEDAS
+, (SELECT BILLETE_100*100 FROM TT_REMESAS REMESA100 WHERE REMESA100.SK_REMESA = REMESAS.SK_REMESA) +
+    (SELECT BILLETE_50*50 FROM TT_REMESAS REMESA50 WHERE REMESA50.SK_REMESA = REMESAS.SK_REMESA) +
+    (SELECT BILLETE_20*20 FROM TT_REMESAS REMESA20 WHERE REMESA20.SK_REMESA = REMESAS.SK_REMESA) +
+    (SELECT BILLETE_10*10 FROM TT_REMESAS REMESA10 WHERE REMESA10.SK_REMESA = REMESAS.SK_REMESA) +
+    (SELECT BILLETE_5*5 FROM TT_REMESAS REMESA5 WHERE REMESA5.SK_REMESA = REMESAS.SK_REMESA) +
+    (SELECT BILLETE_1*1 FROM TT_REMESAS REMESA1 WHERE REMESA1.SK_REMESA = REMESAS.SK_REMESA) +
+    MONEDAS TOTALEFECTIVO
+, CANTIDAD_CHEQUES_PROPIOS
+, IMPORTE_CHEQUES_PROPIOS
+, CANTIDAD_CHEQUES_AJENOS
+, IMPORTE_CHEQUES_AJENOS
+, IMPORTE_CHEQUES_PROPIOS +
+    IMPORTE_CHEQUES_AJENOS TOTALCHEQUES
+, (SELECT BILLETE_100*100 FROM TT_REMESAS REMESA100 WHERE REMESA100.SK_REMESA = REMESAS.SK_REMESA) +
+    (SELECT BILLETE_50*50 FROM TT_REMESAS REMESA50 WHERE REMESA50.SK_REMESA = REMESAS.SK_REMESA) +
+    (SELECT BILLETE_20*20 FROM TT_REMESAS REMESA20 WHERE REMESA20.SK_REMESA = REMESAS.SK_REMESA) +
+    (SELECT BILLETE_10*10 FROM TT_REMESAS REMESA10 WHERE REMESA10.SK_REMESA = REMESAS.SK_REMESA) +
+    (SELECT BILLETE_5*5 FROM TT_REMESAS REMESA5 WHERE REMESA5.SK_REMESA = REMESAS.SK_REMESA) +
+    (SELECT BILLETE_1*1 FROM TT_REMESAS REMESA1 WHERE REMESA1.SK_REMESA = REMESAS.SK_REMESA) +
+    MONEDAS + IMPORTE_CHEQUES_PROPIOS + IMPORTE_CHEQUES_AJENOS TOTALREMESA
+, S_CREA_USUARIO
+FROM TT_REMESAS REMESAS
+WHERE REMESAS.SK_REMESA = $P{SKREMESA}]]>
+	</queryString>
+	<field name="NUM_REMESA" class="java.math.BigDecimal"/>
+	<field name="COLECTURIA_FINAL" class="java.lang.String"/>
+	<field name="NUM_CAJA" class="java.lang.String"/>
+	<field name="CUENTA_OPERATIVA" class="java.lang.String"/>
+	<field name="BANCO" class="java.lang.String"/>
+	<field name="FECHA_INGRESO" class="java.sql.Timestamp"/>
+	<field name="FECHA_REMISION" class="java.sql.Timestamp"/>
+	<field name="BOLSA" class="java.lang.String"/>
+	<field name="BILLETE_100" class="java.math.BigDecimal"/>
+	<field name="VALOR100" class="java.math.BigDecimal"/>
+	<field name="BILLETE_50" class="java.math.BigDecimal"/>
+	<field name="VALOR50" class="java.math.BigDecimal"/>
+	<field name="BILLETE_20" class="java.math.BigDecimal"/>
+	<field name="VALOR20" class="java.math.BigDecimal"/>
+	<field name="BILLETE_10" class="java.math.BigDecimal"/>
+	<field name="VALOR10" class="java.math.BigDecimal"/>
+	<field name="BILLETE_5" class="java.math.BigDecimal"/>
+	<field name="VALOR5" class="java.math.BigDecimal"/>
+	<field name="BILLETE_1" class="java.math.BigDecimal"/>
+	<field name="VALOR1" class="java.math.BigDecimal"/>
+	<field name="MONEDAS" class="java.math.BigDecimal"/>
+	<field name="TOTALEFECTIVO" class="java.math.BigDecimal"/>
+	<field name="CANTIDAD_CHEQUES_PROPIOS" class="java.math.BigDecimal"/>
+	<field name="IMPORTE_CHEQUES_PROPIOS" class="java.math.BigDecimal"/>
+	<field name="CANTIDAD_CHEQUES_AJENOS" class="java.math.BigDecimal"/>
+	<field name="IMPORTE_CHEQUES_AJENOS" class="java.math.BigDecimal"/>
+	<field name="TOTALCHEQUES" class="java.math.BigDecimal"/>
+	<field name="TOTALREMESA" class="java.math.BigDecimal"/>
+	<field name="S_CREA_USUARIO" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="31" splitType="Stretch">
+			<staticText>
+				<reportElement x="46" y="11" width="178" height="20"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DETALLE DE REMESA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="345" y="11" width="27" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="403" y="11" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{NUM_REMESA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="148" splitType="Stretch">
+			<textField>
+				<reportElement x="146" y="6" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{COLECTURIA_FINAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="403" y="6" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NUM_CAJA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="403" y="26" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{CUENTA_OPERATIVA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="146" y="46" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{FECHA_INGRESO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="146" y="66" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{FECHA_REMISION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="46" y="6" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Colecturia:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="46" y="26" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Banco:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="46" y="46" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Fecha de ingreso:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="46" y="66" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Static text]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="6" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Caja:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="26" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="66" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[No. Bolsa]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="141" width="555" height="1"/>
+			</line>
+			<line>
+				<reportElement x="1" y="-27" width="1" height="175"/>
+			</line>
+			<line>
+				<reportElement x="1" y="-27" width="554" height="1"/>
+			</line>
+			<line>
+				<reportElement x="555" y="-26" width="1" height="166"/>
+			</line>
+			<line>
+				<reportElement x="0" y="0" width="556" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="146" y="26" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{BANCO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="66" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{BOLSA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="344" splitType="Stretch">
+			<staticText>
+				<reportElement x="97" y="0" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[TIPO BILLETES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="272" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[HOJAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="412" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[VALORES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="20" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Billetes de 100]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="60" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Billetes de 20]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="40" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Billetes de 50]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="100" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Billetes de 5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="80" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Billetes de 10]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="120" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Billetes de 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="140" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MONEDAS:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="160" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Total monedas]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="272" y="20" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{BILLETE_100}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="412" y="40" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{VALOR50}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="412" y="60" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{VALOR20}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="412" y="80" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{VALOR10}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="412" y="100" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{VALOR5}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="272" y="40" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{BILLETE_50}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="272" y="60" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{BILLETE_20}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="272" y="80" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{BILLETE_10}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="272" y="100" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{BILLETE_5}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="272" y="120" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{BILLETE_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="412" y="160" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{MONEDAS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="412" y="120" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{VALOR1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="58" y="188" width="139" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL EFECTIVO]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="412" y="188" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{TOTALEFECTIVO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="97" y="212" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CHEQUES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="232" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cheques Propios]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="252" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cheques Ajenos]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="272" y="232" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CANTIDAD_CHEQUES_PROPIOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="272" y="252" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CANTIDAD_CHEQUES_AJENOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="412" y="232" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{IMPORTE_CHEQUES_PROPIOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="412" y="252" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{IMPORTE_CHEQUES_AJENOS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="58" y="272" width="139" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL CHEQUES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="58" y="298" width="139" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL REMESA]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="412" y="272" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{TOTALCHEQUES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="412" y="298" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{TOTALREMESA}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="-8" width="1" height="338"/>
+			</line>
+			<line>
+				<reportElement x="555" y="-8" width="1" height="338"/>
+			</line>
+			<line>
+				<reportElement x="2" y="330" width="553" height="1"/>
+			</line>
+			<line>
+				<reportElement x="2" y="293" width="553" height="1"/>
+			</line>
+			<line>
+				<reportElement x="2" y="185" width="553" height="1"/>
+			</line>
+			<line>
+				<reportElement x="2" y="209" width="553" height="1"/>
+			</line>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="412" y="20" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{VALOR100}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="81" splitType="Stretch">
+			<textField>
+				<reportElement x="63" y="38" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{S_CREA_USUARIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="58" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Elaboro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="58" y="58" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nombre Cajero]]></text>
+			</staticText>
+			<line>
+				<reportElement x="58" y="58" width="100" height="1"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

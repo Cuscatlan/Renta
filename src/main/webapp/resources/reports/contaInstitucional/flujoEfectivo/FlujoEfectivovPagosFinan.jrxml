@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="FlujoEfectivovPago" language="groovy" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="fbd21631-fd72-4dd0-b6a3-bec883cdc648">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Mramosl\\Desktop\\mramos_fpemp\\Fpemp_reports\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select ccc.codigo, ccc.descripcion,sum(tcd.haber) as PAGO from TC_PARTIDA tcp , TC_PARTIDA_DETALLE tcd  , CC_CATALOGO_CUENTA ccc ,CC_TIPO_MOVIMIENTO ccm,CC_TIPOS_CUENTA cct
+where cct.CODIGO='P' and ccc.nivel=5 and ccc.SK_TIPO_CUENTA = cct.SK_TIPO_CUENTA and ccc.SK_CUENTA_CONTABLE = tcd.SK_CODIGO_CUENTA
+and tcd.SK_PARTIDA = tcp.SK_PARTIDA and tcp.SK_TIPO_MOVIMIENTO = ccm.SK_TIPO_MOVIMIENTO  and ccm.CODIGO = 'TM2'
+and ccc.TIPO_ACTIVIDAD='FINANCIACION'  and  to_char(tcp.FECHA_CONTABLE,'dd/mm/yyyy') BETWEEN '01/01/'||to_char(sysdate,'YYYY') AND '31/12/'||to_char(sysdate,'YYYY')
+group by  ccc.codigo, ccc.descripcion]]>
+	</queryString>
+	<field name="CODIGO" class="java.lang.String"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="PAGO" class="java.math.BigDecimal"/>
+	<variable name="year" class="java.lang.String">
+		<initialValueExpression><![CDATA[new SimpleDateFormat("yyyy").format(new Date())]]></initialValueExpression>
+	</variable>
+	<variable name="year-1" class="java.lang.String">
+		<initialValueExpression><![CDATA[Calendar.getInstance().get(Calendar.YEAR)-1]]></initialValueExpression>
+	</variable>
+	<variable name="total" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{PAGO}]]></variableExpression>
+	</variable>
+	<variable name="totalPagos" class="java.lang.String"/>
+	<group name="CODIGO">
+		<groupExpression><![CDATA[$F{CODIGO}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="27">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="bf450095-f58d-4d3d-87c8-0b07c02b6542"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pagos]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="26">
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="5" width="541" height="14" uuid="bf6f2cab-596d-46d2-ae0d-71b9e602246e"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="-$#,##0.00">
+				<reportElement x="687" y="5" width="115" height="20" uuid="50768b25-d4ad-4105-a3d8-ad0ac2599fe6"/>
+				<textFieldExpression><![CDATA[$F{PAGO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="24">
+			<textField pattern="-$#,##0.00">
+				<reportElement x="687" y="4" width="115" height="20" uuid="d9f539bb-e0f7-43df-bb99-99b6a65bef6a"/>
+				<textElement textAlignment="Justified">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="4" width="297" height="20" uuid="ffdd4fb1-ba3b-48e4-8ff0-fe27bb5e85b9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Pagos:]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

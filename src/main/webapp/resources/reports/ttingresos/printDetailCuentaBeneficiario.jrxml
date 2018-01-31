@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="printDetailCuentaBeneficiario" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="14"/>
+	<parameter name="SK_CUENTA_BENEFICIARIOS" class="java.lang.Integer"/>
+	<parameter name="FECHA" class="java.lang.String"/>
+	<parameter name="ENTITY" class="java.lang.String"/>
+	<parameter name="cusuario" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+  cb.SK_CUENTAS_BENEFICIARIOS,
+  TCTA.SK_TIPO_CUENTA||'-'||TCTA.DESCRIPCION as SK_TIPO_CUENTA,
+  BCO.AK_BANCO||'-'||BCO.DENOMINACION_BANCO as SK_BANCO,
+  INS.INSTITUCION||'-'||INS.DESCRIPCION AS INSTITUCION_TITULAR,
+  cb.PRIMER_NOMBRE,
+  cb.SEGUNDO_NOMBRE,
+  cb.PRIMER_APELLIDO,
+  cb.SEGUNDO_APELLIDO,
+  cb.NOMBRE_EMPRESA,
+  cb.NIT,
+  cb.DUI,
+  cb.PASAPORTE,
+  cb.TELEFONO,
+  cb.MAIL,
+  cb.DIRECCION,
+  GEOM.CLASIF_GEOGRAFICO||'-'||GEOM.DESCRIPCION AS MUNICIPIO,
+  GEOD.CLASIF_GEOGRAFICO||'-'||GEOD.DESCRIPCION AS DEPARTAMENTO,
+  cb.NOMBRE_REPRESENTANTE_LEGAL,
+  cb.NIT_REPRESENTANTE,
+  cb.MAIL_REPRESENTANTE,
+  cb.TELEFONO_REPRESENTANTE,
+  cb.CODIGO_BCR,
+  cb.NUMERO_CUENTA,
+  cb.NOMBRE_CUENTA,
+  MON.CODIGO_ISO||'-'||MON.DESCRIPCION AS SK_MONEDA,
+  cb.IBAN,
+  EST.DESCRIPCION AS ESTADO,
+  cb.S_CREA_USUARIO,
+  cb.F_CREA_FECHA,
+  cb.S_MOD_USUARIO,
+  cb.F_MOD_FECHA,
+  DECODE(TIPO_TRANSFERENCIA,1,'1-LOCAL',2,'2-INTERNACIONAL') AS TIPO_TRANSFERENCIA ,
+  cb.CLASIF_MINEC,
+  PAI.CODIGO_PAIS_3||'-'||PAI.DENOMINACION AS SK_PAIS,
+  SECT.SECT_INST_PRES||'-'||SECT.DESCRIPCION AS CODIGO_SECTOR,
+  cb.ABA,
+  TCTAI.SK_TIPO_CUENTA||'-'||TCTAI.DESCRIPCION as SK_TIPO_CUENTA_INT,
+  BCOI.AK_BANCO||'-'||BCOI.DENOMINACION_BANCO as SK_BANCO_INT,
+  cb.NUMERO_CUENTA_INT,
+  cb.NOMBRE_CUENTA_INT,
+  MONI.CODIGO_ISO||'-'||MONI.DESCRIPCION AS SK_MONEDA_INT,
+  cb.IBAN_INT,
+  cb.ABA_INT,
+  DECODE(cb.TIPO_PERSONA,'J','2-JURIDICA','N','1-NATURAL','') AS TIPO_PERSONA,
+  cb.CODIGO_ERROR,
+  cb.CODIGO_BCR_INT
+FROM CT_CUENTA_BENEFICIARIOS cb,
+     CT_TIPO_CUENTA tcta,
+     CT_BANCO bco,
+     CI_INSTITUCION INS,
+     CI_CLASIF_GEOGRAFICO GEOD,
+     CI_CLASIF_GEOGRAFICO GEOM,
+     CI_MONEDA MON,
+     CT_INGRESOS_ESTADOS EST,
+     CT_PAIS PAI,
+     CP_SECT_INST_PRES SECT,
+     CT_TIPO_CUENTA tctai,
+     CT_BANCO bcoi,
+     CI_MONEDA MONI
+WHERE CB.SK_TIPO_CUENTA = TCTA.SK_TIPO_CUENTA(+)
+  AND CB.SK_BANCO = BCO.SK_BANCO(+)
+  AND CB.INSTITUCION_TITULAR = INS.SK_INSTITUCION(+)
+  AND CB.MUNICIPIO = GEOM.SK_CLASIF_GEOGRAFICO(+)
+  AND CB.DEPARTAMENTO = GEOD.SK_CLASIF_GEOGRAFICO(+)
+  AND CB.SK_MONEDA = MON.SK_MONEDA(+)
+  AND CB.ESTADO = EST.SK_INGRESO_ESTADO(+)
+  AND CB.SK_PAIS = PAI.SK_PAIS(+)
+  AND CB.CODIGO_SECTOR = SECT.SK_SECT_INST_PRES(+)
+  AND CB.SK_TIPO_CUENTA_INT = TCTAI.SK_TIPO_CUENTA(+)
+  AND CB.SK_BANCO_INT = BCOI.SK_BANCO(+)
+  AND CB.SK_MONEDA_INT = MONI.SK_MONEDA(+)
+AND SK_CUENTAS_BENEFICIARIOS = $P{SK_CUENTA_BENEFICIARIOS}]]>
+	</queryString>
+	<field name="SK_CUENTAS_BENEFICIARIOS" class="java.math.BigDecimal"/>
+	<field name="SK_TIPO_CUENTA" class="java.lang.String"/>
+	<field name="SK_BANCO" class="java.lang.String"/>
+	<field name="INSTITUCION_TITULAR" class="java.lang.String"/>
+	<field name="PRIMER_NOMBRE" class="java.lang.String"/>
+	<field name="SEGUNDO_NOMBRE" class="java.lang.String"/>
+	<field name="PRIMER_APELLIDO" class="java.lang.String"/>
+	<field name="SEGUNDO_APELLIDO" class="java.lang.String"/>
+	<field name="NOMBRE_EMPRESA" class="java.lang.String"/>
+	<field name="NIT" class="java.lang.String"/>
+	<field name="DUI" class="java.lang.String"/>
+	<field name="PASAPORTE" class="java.lang.String"/>
+	<field name="TELEFONO" class="java.lang.String"/>
+	<field name="MAIL" class="java.lang.String"/>
+	<field name="DIRECCION" class="java.lang.String"/>
+	<field name="MUNICIPIO" class="java.lang.String"/>
+	<field name="DEPARTAMENTO" class="java.lang.String"/>
+	<field name="NOMBRE_REPRESENTANTE_LEGAL" class="java.lang.String"/>
+	<field name="NIT_REPRESENTANTE" class="java.lang.String"/>
+	<field name="MAIL_REPRESENTANTE" class="java.lang.String"/>
+	<field name="TELEFONO_REPRESENTANTE" class="java.lang.String"/>
+	<field name="CODIGO_BCR" class="java.lang.String"/>
+	<field name="NUMERO_CUENTA" class="java.lang.String"/>
+	<field name="NOMBRE_CUENTA" class="java.lang.String"/>
+	<field name="SK_MONEDA" class="java.lang.String"/>
+	<field name="IBAN" class="java.lang.String"/>
+	<field name="ESTADO" class="java.lang.String"/>
+	<field name="S_CREA_USUARIO" class="java.lang.String"/>
+	<field name="F_CREA_FECHA" class="java.sql.Timestamp"/>
+	<field name="S_MOD_USUARIO" class="java.lang.String"/>
+	<field name="F_MOD_FECHA" class="java.sql.Timestamp"/>
+	<field name="TIPO_TRANSFERENCIA" class="java.lang.String"/>
+	<field name="CLASIF_MINEC" class="java.lang.String"/>
+	<field name="SK_PAIS" class="java.lang.String"/>
+	<field name="CODIGO_SECTOR" class="java.lang.String"/>
+	<field name="ABA" class="java.lang.String"/>
+	<field name="SK_TIPO_CUENTA_INT" class="java.lang.String"/>
+	<field name="SK_BANCO_INT" class="java.lang.String"/>
+	<field name="NUMERO_CUENTA_INT" class="java.lang.String"/>
+	<field name="NOMBRE_CUENTA_INT" class="java.lang.String"/>
+	<field name="SK_MONEDA_INT" class="java.lang.String"/>
+	<field name="IBAN_INT" class="java.lang.String"/>
+	<field name="ABA_INT" class="java.lang.String"/>
+	<field name="TIPO_PERSONA" class="java.lang.String"/>
+	<field name="CODIGO_ERROR" class="java.math.BigDecimal"/>
+	<field name="CODIGO_BCR_INT" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="355" y="20" width="200" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Usuario: "+ $P{cusuario}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="38" y="20" width="317" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sistema de Administración Financiera Integrado]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="355" y="0" width="200" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Fecha/Hora: "+$P{FECHA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="38" y="0" width="317" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ministerio de Hacienda]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="38" y="40" width="517" height="20"/>
+				<textElement>
+					<font isBold="false" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Catalogo de " +$P{ENTITY}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="678" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="5" width="550" height="1"/>
+			</line>
+			<line>
+				<reportElement x="280" y="5" width="1" height="659"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="22" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{SK_CUENTAS_BENEFICIARIOS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="22" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Código:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="37" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TIPO_TRANSFERENCIA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="37" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Tipo de Transferencia: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="52" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{INSTITUCION_TITULAR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="52" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Institución:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="67" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{CODIGO_SECTOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="67" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Sector:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="82" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NIT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="82" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NIT:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="97" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TIPO_PERSONA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="97" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Tipo de Persona:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="112" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PRIMER_NOMBRE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="127" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SEGUNDO_NOMBRE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="142" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PRIMER_APELLIDO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="157" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SEGUNDO_APELLIDO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="172" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NOMBRE_EMPRESA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="112" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Primer Nombre:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="127" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Segundo Nombre:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="142" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Primer Apellido:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="157" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Segundo Apellido:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="172" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nombre Comercial:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="187" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{CLASIF_MINEC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="187" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Clasificacion MINEC:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="202" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DUI}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="217" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PASAPORTE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="232" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TELEFONO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="247" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{MAIL}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="262" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DIRECCION}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="307" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{MUNICIPIO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="292" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DEPARTAMENTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="202" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DUI:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="277" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SK_PAIS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="217" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Pasaporte:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="232" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Teléfono:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="247" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Email:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="262" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Dirección:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="277" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[País:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="292" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Departamento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="307" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Municipio:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="324" width="550" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="10" y="6" width="269" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS GENERALES DE LA CUENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="325" width="269" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS DEL REPRESENTANTE O APODERADO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="355" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NOMBRE_REPRESENTANTE_LEGAL}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="340" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NIT_REPRESENTANTE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="370" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{MAIL_REPRESENTANTE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="385" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TELEFONO_REPRESENTANTE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="355" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nombre Representante:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="340" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NIT Representante:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="370" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Email Representante:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="385" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Telefóno Representante:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="400" width="550" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="10" y="401" width="269" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS DE LA CUENTA]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="431" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NUMERO_CUENTA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="446" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NOMBRE_CUENTA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="476" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SK_MONEDA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="491" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{IBAN}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="431" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Número Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="446" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nombre Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="476" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Moneda de la cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="491" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[IBAN:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="416" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SK_BANCO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="416" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nombre Banco:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="506" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ABA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="506" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ABA:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="461" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SK_TIPO_CUENTA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="461" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Tipo de Cuenta:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="521" width="550" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="10" y="522" width="269" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS DE LA CUENTA DE INTERMEDIARIO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="582" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SK_TIPO_CUENTA_INT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="537" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SK_BANCO_INT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="552" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NUMERO_CUENTA_INT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="567" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NOMBRE_CUENTA_INT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="597" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SK_MONEDA_INT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="612" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{IBAN_INT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="627" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ABA_INT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="582" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Tipo de Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="537" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nombre Banco:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="552" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Número Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="567" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Nombre Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="597" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Moneda de la Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="612" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[IBAN:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="627" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ABA:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="642" width="550" height="1"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="286" y="646" width="265" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ESTADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="646" width="196" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Estado:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="665" width="550" height="1"/>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

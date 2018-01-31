@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ctCuentasOperativas" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0000000000000018"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SKCUENTASOPERATIVAS" class="java.lang.String"/>
+	<parameter name="USUARIO" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT CUENTA.SK_CUENTAS_OPERATIVAS , CUENTA.SK_BANCO ,TIPOCUENTA.DESCRIPCION SK_TIPO_CUENTA ,
+INST_TITULAR.DESCRIPCION INSTITUCION_TITULAR_CUENTA, INST_RECURSO.DESCRIPCION INSTITUCION_TITULAR_RECURSO,
+CUENTA.CODIGO_BCR ,CUENTA.NUMERO_CUENTA ,CUENTA.TIPO_CUENTA ,
+CUENTA.SK_MONEDA ,CUENTA.DESCRIPCION ,CUENTA.FECHA_CIERRE ,
+CUENTA.FECHA_APERTURA ,CUENTA.RESPONSABLE_CUENTA ,CUENTA.REFRENDARIO_CUENTA ,
+CASE CUENTA.BANCARIA WHEN 1 THEN 'Si'
+ELSE 'No' END BANCARIA,
+CASE CUENTA.LIBRETA WHEN 1 THEN 'Si'
+ELSE 'No' END LIBRETA,
+CASE CUENTA.NOMINAL WHEN 1 THEN 'Si'
+ELSE 'No' END NOMINAL,
+CASE CUENTA.RECAUDADORA WHEN 1 THEN 'Si'
+ELSE 'No' END RECAUDADORA,
+CASE CUENTA.FINANCIADORA WHEN 1 THEN 'Si'
+ELSE 'No' END FINANCIADORA,
+CASE CUENTA.PAGADORA WHEN 1 THEN 'Si'
+ELSE 'No' END PAGADORA,
+CASE CUENTA.MIXTA WHEN 1 THEN 'Si'
+ELSE 'No' END MIXTA,
+CASE CUENTA.CUENTA_CUT WHEN 1 THEN 'Si'
+ELSE 'No' END CUENTA_CUT,
+CASE CUENTA.TRANSFIERE_CUENTA_CUT WHEN 1 THEN 'Si'
+ELSE 'No' END TRANSFIERE_CUENTA_CUT, CUENTA.LIBRETA_ASOCIADA , CUENTA.SK_GRUPO_LIBRETAS ,CUENTA.CUT_ASOCIADA ,CUENTA.SALDO_INICIAL ,
+CUENTA.DEBITOS ,CUENTA.CREDITOS ,CUENTA.SALDO_LIBRO ,CUENTA.SALDO_DISPONIBLE ,
+ESTADOS.DESCRIPCION ESTADO,
+FUENTE_FINANC.DESCRIPCION SK_FUENTE_FINANC ,CUENTA.ORGANISMO ,CUENTA.CONVENIO ,CUENTA.SK_SUCURSAL ,CUENTA.CUENTA_OFICIAL ,CUENTA.OBSERVACIONES ,
+CUENTA.FECHA_CIERRE ,BANCO.DENOMINACION_BANCO, MONEDA.CODIGO_ISO || ' - ' || MONEDA.DESCRIPCION DESC_MONEDA
+FROM CT_CUENTAS_OPERATIVAS CUENTA LEFT JOIN CT_BANCO BANCO ON CUENTA.SK_BANCO = BANCO.SK_BANCO
+LEFT JOIN CI_MONEDA MONEDA ON CUENTA.SK_MONEDA = MONEDA.SK_MONEDA
+LEFT JOIN CT_TIPO_CUENTA TIPOCUENTA ON TIPOCUENTA.SK_TIPO_CUENTA = CUENTA.SK_TIPO_CUENTA
+LEFT JOIN CI_INSTITUCION INST_TITULAR ON CUENTA.INSTITUCION_TITULAR_CUENTA = INST_TITULAR.SK_INSTITUCION
+LEFT JOIN CI_INSTITUCION INST_RECURSO ON CUENTA.INSTITUCION_TITULAR_CUENTA = INST_RECURSO.SK_INSTITUCION
+LEFT JOIN CI_FUENTE_FINANC FUENTE_FINANC ON CUENTA.SK_FUENTE_FINANC = FUENTE_FINANC.SK_FUENTE_FINANC
+LEFT JOIN CT_INGRESOS_ESTADOS ESTADOS ON CUENTA.SK_INGRESO_ESTADO = ESTADOS.SK_INGRESO_ESTADO
+WHERE SK_CUENTAS_OPERATIVAS = $P{SKCUENTASOPERATIVAS}]]>
+	</queryString>
+	<field name="SK_CUENTAS_OPERATIVAS" class="java.math.BigDecimal"/>
+	<field name="SK_BANCO" class="java.math.BigDecimal"/>
+	<field name="SK_TIPO_CUENTA" class="java.lang.String"/>
+	<field name="INSTITUCION_TITULAR_CUENTA" class="java.lang.String"/>
+	<field name="INSTITUCION_TITULAR_RECURSO" class="java.lang.String"/>
+	<field name="CODIGO_BCR" class="java.lang.String"/>
+	<field name="NUMERO_CUENTA" class="java.lang.String"/>
+	<field name="TIPO_CUENTA" class="java.lang.String"/>
+	<field name="SK_MONEDA" class="java.math.BigDecimal"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="FECHA_CIERRE" class="java.sql.Timestamp"/>
+	<field name="FECHA_APERTURA" class="java.sql.Timestamp"/>
+	<field name="RESPONSABLE_CUENTA" class="java.lang.String"/>
+	<field name="REFRENDARIO_CUENTA" class="java.lang.String"/>
+	<field name="BANCARIA" class="java.lang.String"/>
+	<field name="LIBRETA" class="java.lang.String"/>
+	<field name="NOMINAL" class="java.lang.String"/>
+	<field name="RECAUDADORA" class="java.lang.String"/>
+	<field name="FINANCIADORA" class="java.lang.String"/>
+	<field name="PAGADORA" class="java.lang.String"/>
+	<field name="MIXTA" class="java.lang.String"/>
+	<field name="CUENTA_CUT" class="java.lang.String"/>
+	<field name="TRANSFIERE_CUENTA_CUT" class="java.lang.String"/>
+	<field name="LIBRETA_ASOCIADA" class="java.lang.String"/>
+	<field name="SK_GRUPO_LIBRETAS" class="java.math.BigDecimal"/>
+	<field name="CUT_ASOCIADA" class="java.lang.String"/>
+	<field name="SALDO_INICIAL" class="java.math.BigDecimal"/>
+	<field name="DEBITOS" class="java.math.BigDecimal"/>
+	<field name="CREDITOS" class="java.math.BigDecimal"/>
+	<field name="SALDO_LIBRO" class="java.math.BigDecimal"/>
+	<field name="SALDO_DISPONIBLE" class="java.math.BigDecimal"/>
+	<field name="ESTADO" class="java.lang.String"/>
+	<field name="SK_FUENTE_FINANC" class="java.lang.String"/>
+	<field name="ORGANISMO" class="java.lang.String"/>
+	<field name="CONVENIO" class="java.lang.String"/>
+	<field name="SK_SUCURSAL" class="java.math.BigDecimal"/>
+	<field name="CUENTA_OFICIAL" class="java.lang.String"/>
+	<field name="OBSERVACIONES" class="java.lang.String"/>
+	<field name="DENOMINACION_BANCO" class="java.lang.String"/>
+	<field name="DESC_MONEDA" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="71" splitType="Stretch">
+			<line>
+				<reportElement x="2" y="70" width="553" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="40" width="281" height="20"/>
+				<textElement/>
+				<text><![CDATA[Detalle de Cuenta Operativa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-1" y="20" width="282" height="20"/>
+				<textElement/>
+				<text><![CDATA[Sistema de Administracion Financiera Integrado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="0" width="280" height="20"/>
+				<textElement/>
+				<text><![CDATA[Ministerio de Hacienda]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="454" y="0" width="88" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="542" y="0" width="12" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="h:mm a">
+				<reportElement x="407" y="20" width="85" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="492" y="20" width="8" height="20"/>
+				<textElement/>
+				<text><![CDATA[ :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="407" y="40" width="147" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Usuario: " + $P{USUARIO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+				<reportElement x="500" y="20" width="55" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="576" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="80" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DENOMINACION_BANCO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="120" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NUMERO_CUENTA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="140" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DESC_MONEDA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="180" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{RESPONSABLE_CUENTA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="160" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="280" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{BANCARIA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="300" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{LIBRETA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="360" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{RECAUDADORA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="76" y="20" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Titular de la Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="80" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Banco:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="120" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Numero de Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="140" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Moneda de Cuenta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="180" width="190" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nombre de Responsable de la Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="160" width="133" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nombre de la Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="280" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Es Bancaria:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="300" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Es Libreta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="360" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Es Recaudadora:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="40" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Titular del Recurso:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="100" width="133" height="20"/>
+				<textElement/>
+				<text><![CDATA[Tipo cuenta Bancaria:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="520" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Estado:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="200" width="190" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nombre de Refrendario de la Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="420" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Es Mixta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="340" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Es Cut:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="440" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Financiadora:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="100" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SK_TIPO_CUENTA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="520" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ESTADO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="200" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{REFRENDARIO_CUENTA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="420" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{MIXTA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="340" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{CUENTA_CUT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="440" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{FINANCIADORA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="293" y="20" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{INSTITUCION_TITULAR_CUENTA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="293" y="40" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{INSTITUCION_TITULAR_RECURSO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="281" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS GENERALES DE LA CUENTA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="293" y="60" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SK_FUENTE_FINANC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="76" y="60" width="133" height="20"/>
+				<textElement/>
+				<text><![CDATA[Fuente de Financiamiento:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="293" y="220" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{FECHA_APERTURA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="76" y="220" width="190" height="20"/>
+				<textElement/>
+				<text><![CDATA[Fecha de apertura de la Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="240" width="190" height="20"/>
+				<textElement/>
+				<text><![CDATA[Fecha de cierre de la Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="260" width="281" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS DE LA CUENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="320" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Grupo Libreta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="380" width="133" height="20"/>
+				<textElement/>
+				<text><![CDATA[Transfiere saldos a CUT:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="293" y="380" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TRANSFIERE_CUENTA_CUT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="293" y="400" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PAGADORA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="76" y="400" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Es Pagadora:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="460" width="281" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS DE CONVENIO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="480" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ORGANISMO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="76" y="480" width="133" height="20"/>
+				<textElement/>
+				<text><![CDATA[Organismo Financiador:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="500" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Tipo de Convenio:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="293" y="500" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{CONVENIO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="285" y="0" width="1" height="576"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="556" width="281" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RESUMEN DE MOVIMIENTOS DE LA CUENTA]]></text>
+			</staticText>
+			<line>
+				<reportElement x="2" y="575" width="552" height="1"/>
+			</line>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="296" y="240" width="229" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{FECHA_CIERRE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="68" splitType="Stretch">
+			<staticText>
+				<reportElement x="2" y="8" width="74" height="20"/>
+				<textElement/>
+				<text><![CDATA[Saldo Inicio:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="176" y="8" width="109" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Saldo Débitos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="385" y="8" width="75" height="20"/>
+				<textElement/>
+				<text><![CDATA[Suma Créditos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="38" width="74" height="20"/>
+				<textElement/>
+				<text><![CDATA[Saldo de Libro:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="173" y="38" width="109" height="20"/>
+				<textElement/>
+				<text><![CDATA[Saldo Disponibilidad:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="76" y="8" width="87" height="20"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{SALDO_INICIAL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="76" y="38" width="87" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{SALDO_LIBRO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="286" y="38" width="87" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{SALDO_DISPONIBLE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="285" y="8" width="87" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{DEBITOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="460" y="8" width="86" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CREDITOS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+</jasperReport>

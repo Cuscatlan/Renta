@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="incumplimientoPrueba" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="fechadesde" class="java.lang.String"/>
+	<parameter name="fechahasta" class="java.lang.String"/>
+	<parameter name="fechareporte" class="java.lang.String"/>
+	<parameter name="horareporte" class="java.lang.String"/>
+	<parameter name="condicion" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+
+REME.SK_REMESA, TV.SK_TRASLADO_VALORES, CF.DENOMINACION_COLECTURIA, REME.NUM_CAJA, TV.NUMERO_VOUCHER, REME.NUM_REMESA,
+
+(SELECT (SUM(BILLETE_100)*100)+(SUM(BILLETE_50)*50)+(SUM(BILLETE_20)*20)+
+SUM((BILLETE_10)*10)+SUM((BILLETE_5)*5)+SUM(BILLETE_1)+
+SUM(MONEDAS)+SUM(IMPORTE_CHEQUES_PROPIOS)+SUM(IMPORTE_CHEQUES_AJENOS) total
+FROM TT_REMESAS REMESA WHERE REMESA.SK_TRASLADO_VALORES = TV.SK_TRASLADO_VALORES AND REME.SK_REMESA=REMESA.SK_REMESA) TOTAL_REMESA,
+to_char(cast(TV.HORA_ENTREGADA as date),'hh24:mi:ss') as HORA_ENTREGADA,
+NVL(to_char(cast(REME.HORA_DEPOSITADA as date),'hh24:mi:ss'),'No Depositada') as HORA_DEPOSITADA,
+
+(
+select NVL(TO_CHAR(EXTRACT(HOUR FROM (tval.hora_entregada-remea.HORA_DEPOSITADA))),'--') ||'Horas' ||
+NVL(TO_CHAR(EXTRACT(MINUTE  FROM (tval.hora_entregada-remea.HORA_DEPOSITADA))),'--') || 'min'
+from tt_traslado_valores tval join tt_remesas remea on tval.SK_TRASLADO_VALORES=remea.SK_TRASLADO_VALORES
+where remea.sk_remesa=REME.SK_REMESA
+) as retraso
+
+
+FROM TT_TRASLADO_VALORES TV JOIN CT_COLECTURIAS_FINALES CF
+ON TV.SK_COLECTURIA_FINALES = CF.SK_COLECTURIAS_FINALES
+JOIN TT_REMESAS REME ON TV.SK_TRASLADO_VALORES=REME.SK_TRASLADO_VALORES
+where TV.FECHA_ENTREGADA<=$P{fechahasta}
+and TV.FECHA_ENTREGADA>=$P{fechadesde}  $P!{condicion}
+ORDER BY CF.DENOMINACION_COLECTURIA, REME.SK_REMESA, TV.SK_TRASLADO_VALORES, REME.NUM_CAJA, TV.NUMERO_VOUCHER, REME.NUM_REMESA, TV.HORA_ENTREGADA, REME.HORA_DEPOSITADA]]>
+	</queryString>
+	<field name="SK_REMESA" class="java.math.BigDecimal"/>
+	<field name="SK_TRASLADO_VALORES" class="java.math.BigDecimal"/>
+	<field name="DENOMINACION_COLECTURIA" class="java.lang.String"/>
+	<field name="NUM_CAJA" class="java.lang.String"/>
+	<field name="NUMERO_VOUCHER" class="java.lang.String"/>
+	<field name="NUM_REMESA" class="java.math.BigDecimal"/>
+	<field name="TOTAL_REMESA" class="java.math.BigDecimal"/>
+	<field name="HORA_ENTREGADA" class="java.lang.String"/>
+	<field name="HORA_DEPOSITADA" class="java.lang.String"/>
+	<field name="RETRASO" class="java.lang.String"/>
+	<variable name="subtotal" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_REMESA}]]></variableExpression>
+	</variable>
+	<variable name="total" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_REMESA}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_REMESA_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Colecturia" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_REMESA}]]></variableExpression>
+	</variable>
+	<group name="Colecturia">
+		<groupExpression><![CDATA[$F{DENOMINACION_COLECTURIA}]]></groupExpression>
+		<groupFooter>
+			<band height="29">
+				<textField>
+					<reportElement x="378" y="7" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{TOTAL_REMESA_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="269" y="7" width="100" height="20"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[SubTotal]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="3" width="749" height="1"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="87" splitType="Stretch">
+			<textField>
+				<reportElement x="720" y="5" width="32" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="3" y="5" width="79" height="74"/>
+				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\pc home\\Downloads\\escudo sv.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="305" y="5" width="149" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Ministerio de Hacienda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="269" y="25" width="229" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Sistema de Administracion Financiera Integrada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="203" y="45" width="362" height="20" forecolor="#FF0000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[REPORTE DE INCUMPLIMIENTO EN HORARIO DE TRASLADO VALORES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="249" y="65" width="32" height="14"/>
+				<textElement/>
+				<text><![CDATA[DEL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="416" y="65" width="20" height="14"/>
+				<textElement/>
+				<text><![CDATA[AL: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="436" y="65" width="100" height="14"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{fechahasta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="281" y="65" width="100" height="14"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{fechadesde}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="608" y="5" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Pag.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="608" y="25" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="608" y="45" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Hora:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="720" y="25" width="32" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{fechareporte}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="720" y="45" width="32" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{horareporte}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="27" width="750" height="1"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="33" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="47" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Codigo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="0" width="112" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Colecturia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="159" y="0" width="68" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Caja]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="227" y="0" width="73" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[No. Voucher]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="0" width="78" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[No Remesa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="378" y="0" width="91" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monto Efectivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="469" y="0" width="84" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hora Entregada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="553" y="0" width="86" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hora Depositada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="639" y="0" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Retraso]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="26" width="750" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="47" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{SK_TRASLADO_VALORES}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="47" y="0" width="112" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DENOMINACION_COLECTURIA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="159" y="0" width="68" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NUM_CAJA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="227" y="0" width="73" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NUMERO_VOUCHER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="300" y="0" width="78" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{NUM_REMESA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="378" y="0" width="91" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{TOTAL_REMESA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="469" y="0" width="84" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{HORA_ENTREGADA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="553" y="0" width="86" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{HORA_DEPOSITADA}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="639" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{RETRASO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="378" y="10" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$V{total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="269" y="10" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-1" y="9" width="750" height="1"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

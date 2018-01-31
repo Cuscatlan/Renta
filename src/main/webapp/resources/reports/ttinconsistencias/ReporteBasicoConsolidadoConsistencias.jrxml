@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteBasicoaConsolidadoConsistencias" language="groovy" pageWidth="612" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="CAJERO" class="java.lang.String"/>
+	<parameter name="FILTROS" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMG_DIR" class="java.awt.Image" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT COLECTURIAS.DENOMINACION_COLECTURIA,
+USUARIOS.NO_CAJA ,
+TECNICO.C_USUARIO,
+INCONSISTENCIAS.FECHA_INCONSISTENCIA ,
+(SELECT COUNT(1) FROM TT_INGRESOS
+WHERE FECHA_INGRESO = INCONSISTENCIAS.FECHA_INCONSISTENCIA) TRANSACCIONES,
+CANTIDAD,
+DECODE ((SELECT COUNT(1) FROM TT_INGRESOS
+          WHERE FECHA_INGRESO = INCONSISTENCIAS.FECHA_INCONSISTENCIA),
+                             0, 0,
+                             (CANTIDAD / (SELECT COUNT(1) FROM TT_INGRESOS
+          WHERE FECHA_INGRESO = INCONSISTENCIAS.FECHA_INCONSISTENCIA)) * 100 ) porcentaje
+FROM TT_INCONSISTENCIAS INCONSISTENCIAS LEFT JOIN CT_INCONSISTENCIAS_TIPO TIPO ON TIPO.SK_INCONSISTENCIA_TIPO = INCONSISTENCIAS.SK_INCONSISTENCIA_TIPO
+LEFT JOIN CT_INCONSISTENCIAS_GRUPO GRUPO ON TIPO.SK_INCONSISTENCIA_GRUPO = GRUPO.SK_INCONSISTENCIA_GRUPO
+LEFT JOIN CT_COLECTURIAS_FINALES COLECTURIAS ON INCONSISTENCIAS.SK_COLECTURIAS_FINALES = COLECTURIAS.SK_COLECTURIAS_FINALES
+LEFT JOIN CT_USUARIOS_COLECTURIA USUARIOS ON USUARIOS.C_USUARIO = INCONSISTENCIAS.C_USUARIO
+LEFT JOIN APP_TECNICO TECNICO ON TECNICO.C_TECNICO = INCONSISTENCIAS.C_USUARIO
+$P!{FILTROS}
+ORDER BY COLECTURIAS.DENOMINACION_COLECTURIA, USUARIOS.NO_CAJA, TECNICO.C_USUARIO]]>
+	</queryString>
+	<field name="DENOMINACION_COLECTURIA" class="java.lang.String"/>
+	<field name="NO_CAJA" class="java.lang.String"/>
+	<field name="C_USUARIO" class="java.lang.String"/>
+	<field name="FECHA_INCONSISTENCIA" class="java.sql.Timestamp"/>
+	<field name="TRANSACCIONES" class="java.math.BigDecimal"/>
+	<field name="CANTIDAD" class="java.math.BigDecimal"/>
+	<field name="PORCENTAJE" class="java.math.BigDecimal"/>
+	<variable name="CANTIDAD_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{CANTIDAD}]]></variableExpression>
+	</variable>
+	<variable name="TRANSACCIONES_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{TRANSACCIONES}]]></variableExpression>
+	</variable>
+	<variable name="PORCENTAJE_1" class="java.math.BigDecimal" resetType="Column" calculation="Average">
+		<variableExpression><![CDATA[$F{PORCENTAJE}]]></variableExpression>
+	</variable>
+	<variable name="CANTIDAD_2" class="java.math.BigDecimal" resetType="Group" resetGroup="COLECTURIA_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{CANTIDAD}]]></variableExpression>
+	</variable>
+	<variable name="TRANSACCIONES_2" class="java.math.BigDecimal" resetType="Group" resetGroup="COLECTURIA_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{TRANSACCIONES}]]></variableExpression>
+	</variable>
+	<variable name="PORCENTAJE_2" class="java.math.BigDecimal" resetType="Group" resetGroup="COLECTURIA_GROUP" calculation="Average">
+		<variableExpression><![CDATA[$F{PORCENTAJE}]]></variableExpression>
+	</variable>
+	<group name="COLECTURIA_GROUP">
+		<groupExpression><![CDATA[$F{DENOMINACION_COLECTURIA}]]></groupExpression>
+		<groupFooter>
+			<band height="21">
+				<staticText>
+					<reportElement x="5" y="0" width="100" height="20"/>
+					<textElement/>
+					<text><![CDATA[Subtotal:]]></text>
+				</staticText>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="311" y="0" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{CANTIDAD_2}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="411" y="0" width="100" height="20"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{TRANSACCIONES_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00 %">
+					<reportElement x="511" y="0" width="61" height="20"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{PORCENTAJE_2}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="311" y="0" width="261" height="1"/>
+				</line>
+				<line>
+					<reportElement x="311" y="20" width="259" height="1"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="147" splitType="Stretch">
+			<staticText>
+				<reportElement x="434" y="91" width="46" height="20"/>
+				<textElement/>
+				<text><![CDATA[HORA]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="490" y="71" width="80" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="h.mm a">
+				<reportElement x="490" y="91" width="80" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="480" y="111" width="10" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="434" y="51" width="46" height="20"/>
+				<textElement/>
+				<text><![CDATA[PAGINA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="490" y="111" width="80" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CAJERO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="480" y="71" width="10" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="530" y="51" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="490" y="51" width="40" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="128" y="91" width="250" height="20"/>
+				<textElement/>
+				<text><![CDATA[REPORTE DE CONSOLIDADO DE CONSISTENCIAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="434" y="71" width="46" height="20"/>
+				<textElement/>
+				<text><![CDATA[FECHA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="71" width="291" height="20"/>
+				<textElement/>
+				<text><![CDATA[SISTEMA DE ADMINISTRACION  FINANCIERA INTEGRADA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="91" width="10" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="51" width="10" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="165" y="51" width="146" height="20"/>
+				<textElement/>
+				<text><![CDATA[MINISTERIO DE HACIENDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="434" y="111" width="46" height="20"/>
+				<textElement/>
+				<text><![CDATA[USUARIO]]></text>
+			</staticText>
+			<image onErrorType="Blank">
+				<reportElement x="0" y="0" width="70" height="71"/>
+				<imageExpression class="java.awt.Image"><![CDATA[$P{IMG_DIR}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="41" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="572" height="1"/>
+				<graphicElement>
+					<pen lineWidth="1.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="0" y="40" width="572" height="1"/>
+				<graphicElement>
+					<pen lineWidth="1.5"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="5" y="1" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Colecturia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="1" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Caja]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="211" y="1" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nombre Cajero]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="311" y="1" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="411" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="511" y="0" width="59" height="20"/>
+				<textElement/>
+				<text><![CDATA[Porcentaje]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="505" y="20" width="65" height="20"/>
+				<textElement/>
+				<text><![CDATA[Consistencias]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="411" y="20" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Transacciones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="311" y="20" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Inconsistencias]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="5" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DENOMINACION_COLECTURIA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="105" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NO_CAJA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="211" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{C_USUARIO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="311" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CANTIDAD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="411" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{TRANSACCIONES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 %">
+				<reportElement x="511" y="0" width="61" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{PORCENTAJE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="21" splitType="Stretch">
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="311" y="1" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{CANTIDAD_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="411" y="1" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{TRANSACCIONES_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 %" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="511" y="1" width="59" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{PORCENTAJE_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="5" y="1" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="0" width="570" height="1"/>
+				<graphicElement>
+					<pen lineWidth="1.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="0" y="20" width="570" height="1"/>
+			</line>
+		</band>
+	</summary>
+	<noData>
+		<band height="175">
+			<textField>
+				<reportElement x="490" y="51" width="40" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="480" y="111" width="10" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<image onErrorType="Blank">
+				<reportElement x="0" y="0" width="70" height="71"/>
+				<imageExpression class="java.awt.Image"><![CDATA[$P{IMG_DIR}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="480" y="71" width="10" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="128" y="91" width="250" height="20"/>
+				<textElement/>
+				<text><![CDATA[REPORTE DE CONSOLIDADO DE CONSISTENCIAS]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="490" y="71" width="80" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="434" y="71" width="46" height="20"/>
+				<textElement/>
+				<text><![CDATA[FECHA:]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="530" y="51" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="434" y="91" width="46" height="20"/>
+				<textElement/>
+				<text><![CDATA[HORA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="434" y="51" width="46" height="20"/>
+				<textElement/>
+				<text><![CDATA[PAGINA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="51" width="10" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="434" y="111" width="46" height="20"/>
+				<textElement/>
+				<text><![CDATA[USUARIO]]></text>
+			</staticText>
+			<textField pattern="h.mm a">
+				<reportElement x="490" y="91" width="80" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="490" y="111" width="80" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CAJERO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="165" y="51" width="146" height="20"/>
+				<textElement/>
+				<text><![CDATA[MINISTERIO DE HACIENDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="71" width="291" height="20"/>
+				<textElement/>
+				<text><![CDATA[SISTEMA DE ADMINISTRACION  FINANCIERA INTEGRADA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="91" width="10" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="175" y="147" width="182" height="20"/>
+				<textElement/>
+				<text><![CDATA[NO SE ENCONTRARON REGISTROS]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="EstadoDeSituacion-EvolucionDeBienes" language="groovy" pageWidth="1660" pageHeight="792" columnWidth="1620" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="64952b81-c377-42b0-96a9-c7fca6e49be6">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="809"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="anio" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Telma Pineda\\Desktop\\FPEMP\\SAFI-II\\iReport-5.6.0\\REPORTES\\CU 02-10.6\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT EXTRACT (YEAR FROM SYSDATE) FROM DUAL ]]>
+	</queryString>
+	<field name="EXTRACT(YEARFROMSYSDATE)" class="java.math.BigDecimal"/>
+	<title>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="15" width="1620" height="15" uuid="777bce15-4123-4695-9178-5d59d544b8ee"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado de Situación y Evolución de Bienes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="1620" height="15" uuid="fa581065-8e27-49fa-a977-ac0c568651c1"/>
+				<textElement>
+					<font size="7" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Denominación de la entidad o grupo económico:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="30" width="1620" height="15" uuid="8808783e-a697-4cf9-9b55-4014c6ec3a57"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Al 31 de diciembre de "+$P{anio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1545" y="30" width="75" height="15" uuid="bae312c2-e3b2-4351-ab7d-2ea0422e00a2"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[En dólares]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="38" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="195" height="38" uuid="55f83758-72c8-4a2d-86d4-9eac34e71e60"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción (*)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="195" y="0" width="375" height="20" uuid="2ad5922b-c479-4b24-8056-c741f1d910af"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldos al Inicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="195" y="18" width="75" height="20" uuid="3ad4a712-5545-466b-953a-18cc6acdf081"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Valores de Origen]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="18" width="75" height="20" uuid="fe091027-d1db-4fc2-b8c7-55321b28583a"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Mejoras Inversiones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="345" y="18" width="75" height="20" uuid="b36ac011-62e4-44df-bf40-bab2db07c01d"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Revaluaciones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="18" width="75" height="20" uuid="d955f962-8c37-4977-8288-3e549f866b82"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Deterioros]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="495" y="18" width="75" height="20" uuid="06e1cd10-95a5-4872-8684-47065e055de2"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTALES AL INICIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="570" y="0" width="525" height="20" uuid="4da5401b-f49f-4826-b3ea-8afed84576a5"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Movimientos en el ejercicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="570" y="18" width="75" height="20" uuid="2a03dc61-dd50-4887-a14b-abfb6badbaaa"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Altas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="645" y="18" width="75" height="20" uuid="325eb847-9fa2-4748-966d-643cc2e4c509"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Bajas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="720" y="18" width="75" height="20" uuid="03ba9fc5-12e5-40ac-a7f5-356578ad8568"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Mejoras Inversiones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="795" y="18" width="75" height="20" uuid="f6720c3c-9162-4d02-96b7-8ee31d9f2236"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Revaluaciones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="870" y="18" width="75" height="20" uuid="5b7f206c-f1a0-47d2-bbb4-e56da32caf4f"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Deterioros]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="945" y="18" width="75" height="20" uuid="355953bc-66ac-43e3-a76b-59971800ca88"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Otros Movimientos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1020" y="18" width="75" height="20" uuid="d5996021-9ea2-41c2-94bc-e19415b75779"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL MOVIMIENTOS DEL EJERCICIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1095" y="0" width="75" height="38" uuid="5a133311-9647-4ab7-b35e-67187da24868"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SALDOS AL CIERRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1170" y="0" width="375" height="20" uuid="abd42fca-6e48-4bf0-a49b-a2ed884b5996"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Depreciaciones / Agotamiento / Amortizaciones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1170" y="18" width="75" height="20" uuid="f3117040-a208-4d02-8933-7e1fe08ae99f"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Acumuladas al Inicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1245" y="18" width="75" height="20" uuid="d1399b64-28e3-4d6f-9c24-09cd919d0410"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Incrementos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1320" y="18" width="75" height="20" uuid="eb65a420-517d-4592-bfd1-0dae2a45cde5"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Bajas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1395" y="18" width="75" height="20" uuid="c83d01b6-76e4-4dd2-902a-9f664596f5cb"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Del Ejercicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1470" y="18" width="75" height="20" uuid="25521d40-bcda-41e6-83c9-94a4707c74c3"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Acumuladas al Cierre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1545" y="0" width="75" height="38" uuid="a94e90c4-7c58-48a6-b11b-34ad10ca7e65"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VALORES RESIDUALES AL CIERRE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="120" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="195" height="20" backcolor="#CCCCCC" uuid="a6090f51-6d4f-4054-bab6-a81180b775a5"/>
+				<box>
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  BIENES NO CONCESIONADOS]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="0" y="20" width="1620" height="100" uuid="14532f50-d856-4e7a-864a-2838411aa834"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "detalleNoConcesionados.jasper"]]></subreportExpression>
+			</subreport>
+			<rectangle>
+				<reportElement x="195" y="0" width="1425" height="20" backcolor="#CCCCCC" uuid="baad1f78-443b-4471-865e-244382e16f6a"/>
+				<graphicElement>
+					<pen lineWidth="1.5"/>
+				</graphicElement>
+			</rectangle>
+		</band>
+		<band height="15">
+			<subreport>
+				<reportElement x="0" y="0" width="1620" height="15" uuid="73c441b1-9d8b-4ad0-ba0b-d118bd3ce6f2"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "totalNoConcesionados.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="120">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="195" height="20" backcolor="#CCCCCC" uuid="2d8b15c4-7b87-4606-9830-07395ba11f67"/>
+				<box>
+					<pen lineWidth="1.5"/>
+					<topPen lineWidth="1.5"/>
+					<leftPen lineWidth="1.5"/>
+					<bottomPen lineWidth="1.5"/>
+					<rightPen lineWidth="1.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  BIENES  CONCESIONADOS]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="195" y="0" width="1425" height="20" backcolor="#CCCCCC" uuid="52f33b8c-62cf-455a-aad9-d62cac36a0fe"/>
+				<graphicElement>
+					<pen lineWidth="1.5"/>
+				</graphicElement>
+			</rectangle>
+			<subreport>
+				<reportElement x="0" y="20" width="1620" height="100" uuid="0541f1c7-daf1-40a7-bb71-bcb1ebc55bbb"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "detalleConcesionados.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="15">
+			<subreport>
+				<reportElement x="0" y="0" width="1620" height="15" uuid="81a1bdfc-a0e1-472e-9ec3-2311074b0539"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "totalConcesionados.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="25">
+			<subreport>
+				<reportElement x="0" y="5" width="1620" height="20" uuid="e8c1204f-600d-4149-ba94-4c4c4ac39d8a"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "totalConcesionadosNoConcesionados.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="5" width="1620" height="20" uuid="2d2e6728-97e7-4161-b583-2da0f1a1aa3f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[(*): Deberán separarse los activos generadores de efectivo de aquellos que no son.]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

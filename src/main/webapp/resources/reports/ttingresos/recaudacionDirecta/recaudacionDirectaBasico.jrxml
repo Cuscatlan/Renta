@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recaudacionDirectaBasico" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="condicion" class="java.lang.String"/>
+	<parameter name="fechadesde" class="java.lang.String"/>
+	<parameter name="fechahasta" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+  COL.SK_COLECTURIAS_FINALES SK_COLECTURIA,
+  COL.DENOMINACION_COLECTURIA COLECTURIA,
+  FUENT.SK_FUENTE_FINANC SK_FUENTE,
+  FUENT.DESCRIPCION FONDO,
+  (SELECT COUNT(*) FROM TT_INGRESOS CTTING WHERE CTTING.SK_COLECTURIA_FINAL=COL.SK_COLECTURIAS_FINALES AND
+  CTTING.SK_FUENTE_FINANC=FUENT.SK_FUENTE_FINANC AND CTTING.FECHA_INGRESO>=$P{fechadesde} AND
+  CTTING.FECHA_INGRESO<=$P{fechahasta}) TRANSACCIONES,
+  NVL((SELECT SUM(EEINGMED.IMPORTE)
+    FROM
+      (SELECT DISTINCT EEETRAN.SK_TRANSACCION_INGRESO
+        FROM
+        TT_TRANSACCION_INGRESO EEETRAN JOIN TT_INGRESOS EEEINGR ON EEETRAN.SK_TRANSACCION_INGRESO=EEEINGR.SK_TRANSACCION_INGRESO
+        WHERE EEEINGR.SK_FUENTE_FINANC=FUENT.SK_FUENTE_FINANC AND EEEINGR.SK_COLECTURIA_FINAL=COL.SK_COLECTURIAS_FINALES
+        AND EEEINGR.FECHA_INGRESO>=$P{fechadesde} AND EEEINGR.FECHA_INGRESO<=$P{fechahasta}) EETRAN
+        JOIN TT_INGRESOS_MEDIOS_PERC EEINGMED ON EETRAN.SK_TRANSACCION_INGRESO=EEINGMED.SK_TRANSACCION_INGRESO
+        JOIN CT_MEDIO_PERCEPCION EEMEDPERCP ON EEINGMED.SK_MEDIO_PERCEPCION=EEMEDPERCP.SK_MEDIO_PERCEPCION
+        WHERE upper(EEMEDPERCP.DESCRIPCION) LIKE 'EFECTIVO'
+  ),0) EFECTIVO,
+  NVL((SELECT SUM(EEINGMED.IMPORTE)
+    FROM
+      (SELECT DISTINCT EEETRAN.SK_TRANSACCION_INGRESO
+        FROM
+        TT_TRANSACCION_INGRESO EEETRAN JOIN TT_INGRESOS EEEINGR ON EEETRAN.SK_TRANSACCION_INGRESO=EEEINGR.SK_TRANSACCION_INGRESO
+        WHERE EEEINGR.SK_FUENTE_FINANC=FUENT.SK_FUENTE_FINANC AND EEEINGR.SK_COLECTURIA_FINAL=COL.SK_COLECTURIAS_FINALES
+        AND EEEINGR.FECHA_INGRESO>=$P{fechadesde} AND EEEINGR.FECHA_INGRESO<=$P{fechahasta}) EETRAN
+        JOIN TT_INGRESOS_MEDIOS_PERC EEINGMED ON EETRAN.SK_TRANSACCION_INGRESO=EEINGMED.SK_TRANSACCION_INGRESO
+        JOIN CT_MEDIO_PERCEPCION EEMEDPERCP ON EEINGMED.SK_MEDIO_PERCEPCION=EEMEDPERCP.SK_MEDIO_PERCEPCION
+        WHERE upper(EEMEDPERCP.DESCRIPCION) LIKE 'CHEQUES PROPIOS' OR upper(EEMEDPERCP.DESCRIPCION) LIKE 'CHEQUES AJENOS'
+  ),0) CHEQUES,
+  NVL((SELECT SUM(EEINGMED.IMPORTE)
+    FROM
+      (SELECT DISTINCT EEETRAN.SK_TRANSACCION_INGRESO
+        FROM
+        TT_TRANSACCION_INGRESO EEETRAN JOIN TT_INGRESOS EEEINGR ON EEETRAN.SK_TRANSACCION_INGRESO=EEEINGR.SK_TRANSACCION_INGRESO
+        WHERE EEEINGR.SK_FUENTE_FINANC=FUENT.SK_FUENTE_FINANC AND EEEINGR.SK_COLECTURIA_FINAL=COL.SK_COLECTURIAS_FINALES
+        AND EEEINGR.FECHA_INGRESO>=$P{fechadesde} AND EEEINGR.FECHA_INGRESO<=$P{fechahasta}) EETRAN
+        JOIN TT_INGRESOS_MEDIOS_PERC EEINGMED ON EETRAN.SK_TRANSACCION_INGRESO=EEINGMED.SK_TRANSACCION_INGRESO
+        JOIN CT_MEDIO_PERCEPCION EEMEDPERCP ON EEINGMED.SK_MEDIO_PERCEPCION=EEMEDPERCP.SK_MEDIO_PERCEPCION
+        WHERE upper(EEMEDPERCP.DESCRIPCION) LIKE 'TARJETA DE CREDITO' OR upper(EEMEDPERCP.DESCRIPCION) LIKE 'TARJETA CREDITO'
+  ),0) TARJETA_CREDITO,
+  NVL((SELECT SUM(EEINGMED.IMPORTE)
+    FROM
+      (SELECT DISTINCT EEETRAN.SK_TRANSACCION_INGRESO
+        FROM
+        TT_TRANSACCION_INGRESO EEETRAN JOIN TT_INGRESOS EEEINGR ON EEETRAN.SK_TRANSACCION_INGRESO=EEEINGR.SK_TRANSACCION_INGRESO
+        WHERE EEEINGR.SK_FUENTE_FINANC=FUENT.SK_FUENTE_FINANC AND EEEINGR.SK_COLECTURIA_FINAL=COL.SK_COLECTURIAS_FINALES
+        AND EEEINGR.FECHA_INGRESO>=$P{fechadesde} AND EEEINGR.FECHA_INGRESO<=$P{fechahasta}) EETRAN
+        JOIN TT_INGRESOS_MEDIOS_PERC EEINGMED ON EETRAN.SK_TRANSACCION_INGRESO=EEINGMED.SK_TRANSACCION_INGRESO
+        JOIN CT_MEDIO_PERCEPCION EEMEDPERCP ON EEINGMED.SK_MEDIO_PERCEPCION=EEMEDPERCP.SK_MEDIO_PERCEPCION
+        WHERE upper(EEMEDPERCP.DESCRIPCION) LIKE 'NOTA DE CREDITO' OR upper(EEMEDPERCP.DESCRIPCION) LIKE 'NCTP'
+  ),0) NCTP,
+  NVL((SELECT SUM(EEINGMED.IMPORTE)
+    FROM
+      (SELECT DISTINCT EEETRAN.SK_TRANSACCION_INGRESO
+        FROM
+        TT_TRANSACCION_INGRESO EEETRAN JOIN TT_INGRESOS EEEINGR ON EEETRAN.SK_TRANSACCION_INGRESO=EEEINGR.SK_TRANSACCION_INGRESO
+        WHERE EEEINGR.SK_FUENTE_FINANC=FUENT.SK_FUENTE_FINANC AND EEEINGR.SK_COLECTURIA_FINAL=COL.SK_COLECTURIAS_FINALES
+        AND EEEINGR.FECHA_INGRESO>=$P{fechadesde} AND EEEINGR.FECHA_INGRESO<=$P{fechahasta}) EETRAN
+        JOIN TT_INGRESOS_MEDIOS_PERC EEINGMED ON EETRAN.SK_TRANSACCION_INGRESO=EEINGMED.SK_TRANSACCION_INGRESO
+        JOIN CT_MEDIO_PERCEPCION EEMEDPERCP ON EEINGMED.SK_MEDIO_PERCEPCION=EEMEDPERCP.SK_MEDIO_PERCEPCION
+        WHERE upper(EEMEDPERCP.DESCRIPCION) LIKE 'NOTA DE CREDITO' OR upper(EEMEDPERCP.DESCRIPCION) LIKE 'NCTP'
+  ),0) LOTES,
+  (
+  NVL((SELECT SUM(EEINGMED.IMPORTE)
+    FROM
+      (SELECT DISTINCT EEETRAN.SK_TRANSACCION_INGRESO
+        FROM
+        TT_TRANSACCION_INGRESO EEETRAN JOIN TT_INGRESOS EEEINGR ON EEETRAN.SK_TRANSACCION_INGRESO=EEEINGR.SK_TRANSACCION_INGRESO
+        WHERE EEEINGR.SK_FUENTE_FINANC=FUENT.SK_FUENTE_FINANC AND EEEINGR.SK_COLECTURIA_FINAL=COL.SK_COLECTURIAS_FINALES
+        AND EEEINGR.FECHA_INGRESO>=$P{fechadesde} AND EEEINGR.FECHA_INGRESO<=$P{fechahasta}) EETRAN
+        JOIN TT_INGRESOS_MEDIOS_PERC EEINGMED ON EETRAN.SK_TRANSACCION_INGRESO=EEINGMED.SK_TRANSACCION_INGRESO
+        JOIN CT_MEDIO_PERCEPCION EEMEDPERCP ON EEINGMED.SK_MEDIO_PERCEPCION=EEMEDPERCP.SK_MEDIO_PERCEPCION
+        WHERE upper(EEMEDPERCP.DESCRIPCION) LIKE 'EFECTIVO'
+  ),0) +
+  NVL((SELECT SUM(EEINGMED.IMPORTE)
+    FROM
+      (SELECT DISTINCT EEETRAN.SK_TRANSACCION_INGRESO
+        FROM
+        TT_TRANSACCION_INGRESO EEETRAN JOIN TT_INGRESOS EEEINGR ON EEETRAN.SK_TRANSACCION_INGRESO=EEEINGR.SK_TRANSACCION_INGRESO
+        WHERE EEEINGR.SK_FUENTE_FINANC=FUENT.SK_FUENTE_FINANC AND EEEINGR.SK_COLECTURIA_FINAL=COL.SK_COLECTURIAS_FINALES
+        AND EEEINGR.FECHA_INGRESO>=$P{fechadesde} AND EEEINGR.FECHA_INGRESO<=$P{fechahasta}) EETRAN
+        JOIN TT_INGRESOS_MEDIOS_PERC EEINGMED ON EETRAN.SK_TRANSACCION_INGRESO=EEINGMED.SK_TRANSACCION_INGRESO
+        JOIN CT_MEDIO_PERCEPCION EEMEDPERCP ON EEINGMED.SK_MEDIO_PERCEPCION=EEMEDPERCP.SK_MEDIO_PERCEPCION
+        WHERE upper(EEMEDPERCP.DESCRIPCION) LIKE 'CHEQUES PROPIOS' OR upper(EEMEDPERCP.DESCRIPCION) LIKE 'CHEQUES AJENOS'
+  ),0) +
+  NVL((SELECT SUM(EEINGMED.IMPORTE)
+    FROM
+      (SELECT DISTINCT EEETRAN.SK_TRANSACCION_INGRESO
+        FROM
+        TT_TRANSACCION_INGRESO EEETRAN JOIN TT_INGRESOS EEEINGR ON EEETRAN.SK_TRANSACCION_INGRESO=EEEINGR.SK_TRANSACCION_INGRESO
+        WHERE EEEINGR.SK_FUENTE_FINANC=FUENT.SK_FUENTE_FINANC AND EEEINGR.SK_COLECTURIA_FINAL=COL.SK_COLECTURIAS_FINALES
+        AND EEEINGR.FECHA_INGRESO>=$P{fechadesde} AND EEEINGR.FECHA_INGRESO<=$P{fechahasta}) EETRAN
+        JOIN TT_INGRESOS_MEDIOS_PERC EEINGMED ON EETRAN.SK_TRANSACCION_INGRESO=EEINGMED.SK_TRANSACCION_INGRESO
+        JOIN CT_MEDIO_PERCEPCION EEMEDPERCP ON EEINGMED.SK_MEDIO_PERCEPCION=EEMEDPERCP.SK_MEDIO_PERCEPCION
+        WHERE upper(EEMEDPERCP.DESCRIPCION) LIKE 'TARJETA DE CREDITO' OR upper(EEMEDPERCP.DESCRIPCION) LIKE 'TARJETA CREDITO'
+  ),0) +
+  NVL((SELECT SUM(EEINGMED.IMPORTE)
+    FROM
+      (SELECT DISTINCT EEETRAN.SK_TRANSACCION_INGRESO
+        FROM
+        TT_TRANSACCION_INGRESO EEETRAN JOIN TT_INGRESOS EEEINGR ON EEETRAN.SK_TRANSACCION_INGRESO=EEEINGR.SK_TRANSACCION_INGRESO
+        WHERE EEEINGR.SK_FUENTE_FINANC=FUENT.SK_FUENTE_FINANC AND EEEINGR.SK_COLECTURIA_FINAL=COL.SK_COLECTURIAS_FINALES
+        AND EEEINGR.FECHA_INGRESO>=$P{fechadesde} AND EEEINGR.FECHA_INGRESO<=$P{fechahasta}) EETRAN
+        JOIN TT_INGRESOS_MEDIOS_PERC EEINGMED ON EETRAN.SK_TRANSACCION_INGRESO=EEINGMED.SK_TRANSACCION_INGRESO
+        JOIN CT_MEDIO_PERCEPCION EEMEDPERCP ON EEINGMED.SK_MEDIO_PERCEPCION=EEMEDPERCP.SK_MEDIO_PERCEPCION
+        WHERE upper(EEMEDPERCP.DESCRIPCION) LIKE 'NOTA DE CREDITO' OR upper(EEMEDPERCP.DESCRIPCION) LIKE 'NCTP'
+  ),0) +
+  NVL((SELECT SUM(EEINGMED.IMPORTE)
+    FROM
+      (SELECT DISTINCT EEETRAN.SK_TRANSACCION_INGRESO
+        FROM
+        TT_TRANSACCION_INGRESO EEETRAN JOIN TT_INGRESOS EEEINGR ON EEETRAN.SK_TRANSACCION_INGRESO=EEEINGR.SK_TRANSACCION_INGRESO
+        WHERE EEEINGR.SK_FUENTE_FINANC=FUENT.SK_FUENTE_FINANC AND EEEINGR.SK_COLECTURIA_FINAL=COL.SK_COLECTURIAS_FINALES
+        AND EEEINGR.FECHA_INGRESO>=$P{fechadesde} AND EEEINGR.FECHA_INGRESO<=$P{fechahasta}) EETRAN
+        JOIN TT_INGRESOS_MEDIOS_PERC EEINGMED ON EETRAN.SK_TRANSACCION_INGRESO=EEINGMED.SK_TRANSACCION_INGRESO
+        JOIN CT_MEDIO_PERCEPCION EEMEDPERCP ON EEINGMED.SK_MEDIO_PERCEPCION=EEMEDPERCP.SK_MEDIO_PERCEPCION
+        WHERE upper(EEMEDPERCP.DESCRIPCION) LIKE 'NOTA DE CREDITO' OR upper(EEMEDPERCP.DESCRIPCION) LIKE 'NCTP'
+  ),0)
+  ) TOTAL_INGRESO
+FROM CT_COLECTURIAS_FINALES COL, CI_FUENTE_FINANC FUENT
+$P!{condicion}]]>
+	</queryString>
+	<field name="SK_COLECTURIA" class="java.math.BigDecimal"/>
+	<field name="COLECTURIA" class="java.lang.String"/>
+	<field name="SK_FUENTE" class="java.math.BigDecimal"/>
+	<field name="FONDO" class="java.lang.String"/>
+	<field name="TRANSACCIONES" class="java.math.BigDecimal"/>
+	<field name="EFECTIVO" class="java.math.BigDecimal"/>
+	<field name="CHEQUES" class="java.math.BigDecimal"/>
+	<field name="TARJETA_CREDITO" class="java.math.BigDecimal"/>
+	<field name="NCTP" class="java.math.BigDecimal"/>
+	<field name="LOTES" class="java.math.BigDecimal"/>
+	<field name="TOTAL_INGRESO" class="java.math.BigDecimal"/>
+	<variable name="EFECTIVO_1" class="java.math.BigDecimal" resetType="Group" resetGroup="recaudacionByFondo" calculation="Sum">
+		<variableExpression><![CDATA[$F{EFECTIVO}]]></variableExpression>
+	</variable>
+	<variable name="CHEQUES_1" class="java.math.BigDecimal" resetType="Group" resetGroup="recaudacionByFondo" calculation="Sum">
+		<variableExpression><![CDATA[$F{CHEQUES}]]></variableExpression>
+	</variable>
+	<variable name="TARJETA_CREDITO_1" class="java.math.BigDecimal" resetType="Group" resetGroup="recaudacionByFondo" calculation="Sum">
+		<variableExpression><![CDATA[$F{TARJETA_CREDITO}]]></variableExpression>
+	</variable>
+	<variable name="NCTP_1" class="java.math.BigDecimal" resetType="Group" resetGroup="recaudacionByFondo" calculation="Sum">
+		<variableExpression><![CDATA[$F{NCTP}]]></variableExpression>
+	</variable>
+	<variable name="LOTES_1" class="java.math.BigDecimal" resetType="Group" resetGroup="recaudacionByFondo" calculation="Sum">
+		<variableExpression><![CDATA[$F{LOTES}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_INGRESO_1" class="java.math.BigDecimal" resetType="Group" resetGroup="recaudacionByFondo" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_INGRESO}]]></variableExpression>
+	</variable>
+	<group name="recaudacionByFondo">
+		<groupExpression><![CDATA[$F{FONDO}]]></groupExpression>
+		<groupHeader>
+			<band height="3"/>
+		</groupHeader>
+		<groupFooter>
+			<band height="33">
+				<textField>
+					<reportElement x="229" y="4" width="42" height="20"/>
+					<textElement>
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{EFECTIVO_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="271" y="4" width="45" height="20"/>
+					<textElement>
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{CHEQUES_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="316" y="4" width="73" height="20"/>
+					<textElement>
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{TARJETA_CREDITO_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="389" y="4" width="33" height="20"/>
+					<textElement>
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{NCTP_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="422" y="4" width="41" height="20"/>
+					<textElement>
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{LOTES_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="463" y="4" width="78" height="20"/>
+					<textElement>
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{TOTAL_INGRESO_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="124" y="4" width="100" height="20"/>
+					<textElement textAlignment="Right">
+						<font size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[SubTotal:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="229" y="1" width="312" height="1"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="91" splitType="Stretch">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="3" width="85" height="65"/>
+				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\pc home\\Downloads\\escudo sv.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="213" y="3" width="171" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINISTERIO DE HACIENDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="132" y="23" width="316" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SISTEMA DE ADMINISTRACION FINANCIERA INTEGRADA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="198" y="43" width="188" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE RECAUDACION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="63" width="25" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DEL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="63" width="16" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[AL:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="205" y="63" width="100" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{fechadesde}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="356" y="63" width="100" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{fechahasta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="10" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="39" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="16" width="64" height="20"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COLECTURIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="64" y="16" width="100" height="20"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FONDO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="164" y="16" width="65" height="20"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TRANSACCIONES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="229" y="16" width="42" height="20"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EFECTIVO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="271" y="16" width="45" height="20"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CHEQUES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="316" y="16" width="73" height="20"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TARJETA DE CREDITO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="389" y="16" width="33" height="20"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NCTP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="422" y="16" width="41" height="20"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LOTES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="463" y="16" width="78" height="20"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL_INGRESO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="9" width="555" height="1"/>
+			</line>
+			<line>
+				<reportElement x="0" y="34" width="555" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="64" height="20"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{COLECTURIA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="64" y="0" width="100" height="20"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{FONDO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="164" y="0" width="65" height="20"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{TRANSACCIONES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="229" y="0" width="42" height="20"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{EFECTIVO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="271" y="0" width="45" height="20"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{CHEQUES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="316" y="0" width="73" height="20"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{TARJETA_CREDITO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="389" y="0" width="33" height="20"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{NCTP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="422" y="0" width="41" height="20"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{LOTES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="463" y="0" width="78" height="20"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{TOTAL_INGRESO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

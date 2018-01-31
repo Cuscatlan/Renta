@@ -1,0 +1,924 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEstadoSituacionFinanciera" language="groovy" pageWidth="1116" pageHeight="612" orientation="Landscape" columnWidth="1076" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fac8473f-7a9b-4673-9061-8eaf9d21f531">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="skInstitucion" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fechaInicio" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["01-01-2016"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fechaFin" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["01-01-2016"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select a.codigo, 'Saldos Iniciales' as descripcion, 0 as grupo, 'Saldos Iniciales' as nombre_grupo,
+       0 as capital,
+       0 as reserva_legales,
+       0 as reevaluacion_bienes,
+       0 as otras_reservas,
+       0 as otras_variaciones,
+       0 as acumulados,
+       0 as intereses_1,
+       0 as intereses_2,
+       ADD_MONTHS(to_date('01-01-2016','dd-mm-yyyy'),-1)
+from  cc_catalogo_cuenta a left outer join tc_periodos_contables_saldos b on a.sk_cuenta_contable = b.sk_cuenta
+where a.codigo = '314010301'
+group by a.sk_cuenta_contable, a.codigo, a.descripcion
+
+union all
+
+select a.codigo, 'Cambios en las politicas Contables' as descripcion, 1 as grupo, 'Saldos Ajustados' as nombre_grupo,
+       0 as capital,
+       0 as reserva_legales,
+       0 as reevaluacion_bienes,
+       0 as otras_reservas,
+       0 as otras_variaciones,
+       nvl(sum(b.haber),0) - nvl(sum(b.debe),0) as acumulados,
+       0 as intereses_1,
+       0 as intereses_2,
+       ADD_MONTHS(to_date('01-01-2016','dd-mm-yyyy'),-1)
+from  cc_catalogo_cuenta a left outer join tc_periodos_contables_saldos b on a.sk_cuenta_contable = b.sk_cuenta
+where a.codigo = '314010301'
+group by a.sk_cuenta_contable, a.codigo, a.descripcion
+
+union all
+
+select a.codigo, 'Correccion de Errores Fundamentales' as descripcion, 1 as grupo, 'Saldos Ajustados' as nombre_grupo,
+       0 as capital,
+       0 as reserva_legales,
+       0 as reevaluacion_bienes,
+       0 as otras_reservas,
+       0 as otras_variaciones,
+       nvl(sum(b.haber),0) - nvl(sum(b.debe),0) as acumulados,
+       0 as intereses_1,
+       0 as intereses_2,
+       ADD_MONTHS(to_date('01-01-2016','dd-mm-yyyy'),-1)
+from  cc_catalogo_cuenta a left outer join tc_periodos_contables_saldos b on a.sk_cuenta_contable = b.sk_cuenta
+where a.codigo = '314010302'
+group by a.sk_cuenta_contable, a.codigo, a.descripcion
+
+union all
+
+select a.codigo, 'Otros Ajustes al Inicio' as descripcion, 1 as grupo, 'Saldos Ajustados' as nombre_grupo,
+       0 as capital,
+       0 as reserva_legales,
+       0 as reevaluacion_bienes,
+       0 as otras_reservas,
+       0 as otras_variaciones,
+       nvl(sum(b.haber),0) - nvl(sum(b.debe),0) as acumulados,
+       0 as intereses_1,
+       0 as intereses_2,
+       ADD_MONTHS(to_date('01-01-2016','dd-mm-yyyy'),-1)
+from  cc_catalogo_cuenta a left outer join tc_periodos_contables_saldos b on a.sk_cuenta_contable = b.sk_cuenta
+where a.codigo = '314010399'
+group by a.sk_cuenta_contable, a.codigo, a.descripcion
+
+union all
+
+select a.codigo, 'Incorporaciones al Capital' as descripcion, 2 as grupo, 'Variaciones del Ejercicio' as nombre_grupo,
+       nvl(sum(b.haber),0) - nvl(sum(b.debe),0) as capital,
+       0 as reserva_legales,
+       0 as reevaluacion_bienes,
+       0 as otras_reservas,
+       0 as otras_variaciones,
+       0 as acumulados,
+       0 as intereses_1,
+       0 as intereses_2,
+       ADD_MONTHS(to_date('01-01-2016','dd-mm-yyyy'),-1)
+from  cc_catalogo_cuenta a left outer join tc_periodos_contables_saldos b on a.sk_cuenta_contable = b.sk_cuenta
+where a.codigo in ('31101','31102')
+group by a.sk_cuenta_contable, a.codigo, a.descripcion
+
+union all
+
+select a.codigo, 'Reevaluo de Bienes' as descripcion, 2 as grupo, 'Variaciones del Ejercicio' as nombre_grupo,
+       0 as capital,
+       0 as reserva_legales,
+       nvl(sum(b.haber),0) - nvl(sum(b.debe),0)  as reevaluacion_bienes,
+       0 as otras_reservas,
+       0 as otras_variaciones,
+       0 as acumulados,
+       0 as intereses_1,
+       0 as intereses_2,
+       ADD_MONTHS(to_date('01-01-2016','dd-mm-yyyy'),-1)
+from  cc_catalogo_cuenta a left outer join tc_periodos_contables_saldos b on a.sk_cuenta_contable = b.sk_cuenta
+where a.codigo in ('31202')
+group by a.sk_cuenta_contable, a.codigo, a.descripcion
+
+union all
+
+select a.codigo, 'Diferencias de Conversion de Moneda Extrajera' as descripcion, 2 as grupo, 'Variaciones del Ejercicio' as nombre_grupo,
+       0 as capital,
+       0 as reserva_legales,
+       0 as reevaluacion_bienes,
+       0 as otras_reservas,
+       nvl(sum(b.haber),0) - nvl(sum(b.debe),0) as otras_variaciones,
+       0 as acumulados,
+       0 as intereses_1,
+       0 as intereses_2,
+       ADD_MONTHS(to_date('01-01-2016','dd-mm-yyyy'),-1)
+from  cc_catalogo_cuenta a left outer join tc_periodos_contables_saldos b on a.sk_cuenta_contable = b.sk_cuenta
+where a.codigo in ('31301')
+group by a.sk_cuenta_contable, a.codigo, a.descripcion
+
+
+union all
+
+select a.codigo,
+       'Diferencias de Valor Razonables de Activos Finacieros destinados a la Venta' as descripcion, 2 as grupo,
+       'Variaciones del Ejercicio' as nombre_grupo,
+       0 as capital,
+       0 as reserva_legales,
+       0 as reevaluacion_bienes,
+       0 as otras_reservas,
+       nvl(sum(b.haber),0) - nvl(sum(b.debe),0) as otras_variaciones,
+       0 as acumulados,
+       0 as intereses_1,
+       0 as intereses_2,
+       ADD_MONTHS(to_date('01-01-2016','dd-mm-yyyy'),-1)
+from  cc_catalogo_cuenta a left outer join tc_periodos_contables_saldos b on a.sk_cuenta_contable = b.sk_cuenta
+where a.codigo in ('31302')
+group by a.sk_cuenta_contable, a.codigo, a.descripcion
+
+union all
+
+select a.codigo, 'Diferencias de Valor Razonables de Instrumentos Finacieros desigandos como cobertura' as descripcion, 2 as grupo,
+       'Variaciones del Ejercicio' as nombre_grupo,
+       0 as capital,
+       0 as reserva_legales,
+       0 as reevaluacion_bienes,
+       0 as otras_reservas,
+       nvl(sum(b.haber),0) - nvl(sum(b.debe),0) as otras_variaciones,
+       0 as acumulados,
+       0 as intereses_1,
+       0 as intereses_2,
+       ADD_MONTHS(to_date('01-01-2016','dd-mm-yyyy'),-1)
+from  cc_catalogo_cuenta a left outer join tc_periodos_contables_saldos b on a.sk_cuenta_contable = b.sk_cuenta
+where a.codigo in ('31303')
+group by a.sk_cuenta_contable, a.codigo, a.descripcion
+
+
+union all
+
+select a.codigo, 'Reserva de reevaluacion transferidas a resultados acumulados' as descripcion, 2 as grupo, 'Variaciones del Ejercicio' as nombre_grupo,
+       0 as capital,
+       0 as reserva_legales,
+       nvl(sum(b.haber),0) - nvl(sum(b.debe),0) as reevaluacion_bienes,
+       0 as otras_reservas,
+       0as otras_variaciones,
+       0 as acumulados,
+       0 as intereses_1,
+       0 as intereses_2,
+       ADD_MONTHS(to_date('01-01-2016','dd-mm-yyyy'),-1)
+from  cc_catalogo_cuenta a left outer join tc_periodos_contables_saldos b on a.sk_cuenta_contable = b.sk_cuenta
+where a.codigo in ('3140104')
+group by a.sk_cuenta_contable, a.codigo, a.descripcion
+
+union all
+
+select a.codigo, 'Incrementos de resultados acumulados' as descripcion, 2 as grupo, 'Variaciones del Ejercicio' as nombre_grupo,
+       0 as capital,
+       0 as reserva_legales,
+       0 as reevaluacion_bienes,
+       0 as otras_reservas,
+       0 as otras_variaciones,
+       case when nvl(sum(b.haber),0) - nvl(sum(b.debe),0) > 0 then nvl(sum(b.haber),0) - nvl(sum(b.debe),0) else 0 end as acumulados,
+       0 as intereses_1,
+       0 as intereses_2,
+       ADD_MONTHS(to_date('01-01-2016','dd-mm-yyyy'),-1)
+from  cc_catalogo_cuenta a left outer join tc_periodos_contables_saldos b on a.sk_cuenta_contable = b.sk_cuenta
+where a.codigo in ('3140101','3140102')
+group by a.sk_cuenta_contable, a.codigo, a.descripcion
+
+union all
+
+select a.codigo, 'Disminuciones de resultados acumulados' as descripcion, 2 as grupo, 'Variaciones del Ejercicio' as nombre_grupo,
+       0 as capital,
+       0 as reserva_legales,
+       0 as reevaluacion_bienes,
+       0 as otras_reservas,
+       0 as otras_variaciones,
+       case when nvl(sum(b.haber),0) - nvl(sum(b.debe),0) < 0 then nvl(sum(b.haber),0) - nvl(sum(b.debe),0) else 0 end as acumulados,
+       0 as intereses_1,
+       0 as intereses_2,
+       ADD_MONTHS(to_date('01-01-2016','dd-mm-yyyy'),-1)
+from  cc_catalogo_cuenta a left outer join tc_periodos_contables_saldos b on a.sk_cuenta_contable = b.sk_cuenta
+where a.codigo in ('3140101','3140102')
+group by a.sk_cuenta_contable, a.codigo, a.descripcion
+
+union all
+
+select a.codigo, 'Otros Incrementos' as descripcion, 2 as grupo, 'Variaciones del Ejercicio' as nombre_grupo,
+       case when nvl(sum(b.haber),0) - nvl(sum(b.debe),0) > 0 and a.codigo = '31103' then nvl(sum(b.haber),0) - nvl(sum(b.debe),0) else 0 end  as capital,
+       case when nvl(sum(b.haber),0) - nvl(sum(b.debe),0) > 0 and a.codigo = '31201' then nvl(sum(b.haber),0) - nvl(sum(b.debe),0) else 0 end  as reserva_legales,
+       0 as reevaluacion_bienes,
+       case when nvl(sum(b.haber),0) - nvl(sum(b.debe),0) > 0 and a.codigo = '31299' then nvl(sum(b.haber),0) - nvl(sum(b.debe),0) else 0 end   as otras_reservas,
+       0 as otras_variaciones,
+       case when nvl(sum(b.haber),0) - nvl(sum(b.debe),0) > 0 and a.codigo = '3140199' then nvl(sum(b.haber),0) - nvl(sum(b.debe),0) else 0 end   as acumulados,
+       0 as intereses_1,
+       0 as intereses_2,
+       ADD_MONTHS(to_date('01-01-2016','dd-mm-yyyy'),-1)
+from  cc_catalogo_cuenta a left outer join tc_periodos_contables_saldos b on a.sk_cuenta_contable = b.sk_cuenta
+where a.codigo in ('31103','31201','31299','3140199')
+group by a.sk_cuenta_contable, a.codigo, a.descripcion
+
+order by grupo, nombre_grupo]]>
+	</queryString>
+	<field name="CODIGO" class="java.lang.String"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="GRUPO" class="java.math.BigDecimal"/>
+	<field name="NOMBRE_GRUPO" class="java.lang.String"/>
+	<field name="CAPITAL" class="java.math.BigDecimal"/>
+	<field name="RESERVA_LEGALES" class="java.math.BigDecimal"/>
+	<field name="REEVALUACION_BIENES" class="java.math.BigDecimal"/>
+	<field name="OTRAS_RESERVAS" class="java.math.BigDecimal"/>
+	<field name="OTRAS_VARIACIONES" class="java.math.BigDecimal"/>
+	<field name="ACUMULADOS" class="java.math.BigDecimal"/>
+	<field name="INTERESES_1" class="java.math.BigDecimal"/>
+	<field name="INTERESES_2" class="java.math.BigDecimal"/>
+	<field name="ADD_MONTHS(TO_DATE(&apos;01-01-2016&apos;,&apos;DD-MM-YYYY&apos;),-1)" class="java.sql.Timestamp"/>
+	<variable name="totalCapital" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{CAPITAL}]]></variableExpression>
+	</variable>
+	<variable name="totalReservaLegal" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{RESERVA_LEGALES}]]></variableExpression>
+	</variable>
+	<variable name="totalReevaluacion" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{REEVALUACION_BIENES}]]></variableExpression>
+	</variable>
+	<variable name="totalOtrasReservas" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{OTRAS_RESERVAS}]]></variableExpression>
+	</variable>
+	<variable name="totalOtrasVariaciones" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{OTRAS_VARIACIONES}]]></variableExpression>
+	</variable>
+	<variable name="totalAcumulados" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{ACUMULADOS}]]></variableExpression>
+	</variable>
+	<variable name="totalIntereses1" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{INTERESES_1}]]></variableExpression>
+	</variable>
+	<variable name="totalIntereses2" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{INTERESES_2}]]></variableExpression>
+	</variable>
+	<variable name="totalCapital_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{CAPITAL}]]></variableExpression>
+	</variable>
+	<variable name="totalReservaLegal_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{RESERVA_LEGALES}]]></variableExpression>
+	</variable>
+	<variable name="totalReevaluacion_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{REEVALUACION_BIENES}]]></variableExpression>
+	</variable>
+	<variable name="totalOtrasReservas_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{OTRAS_RESERVAS}]]></variableExpression>
+	</variable>
+	<variable name="totalOtrasVariaciones_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{OTRAS_VARIACIONES}]]></variableExpression>
+	</variable>
+	<variable name="totalAcumulados_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{ACUMULADOS}]]></variableExpression>
+	</variable>
+	<variable name="totalIntereses1_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{INTERESES_1}]]></variableExpression>
+	</variable>
+	<variable name="totalIntereses2_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Grupos" calculation="Sum">
+		<variableExpression><![CDATA[$F{INTERESES_2}]]></variableExpression>
+	</variable>
+	<group name="Grupos">
+		<groupExpression><![CDATA[$F{GRUPO}]]></groupExpression>
+		<groupHeader>
+			<band height="18">
+				<printWhenExpression><![CDATA[$F{GRUPO} != 0]]></printWhenExpression>
+				<textField>
+					<reportElement x="0" y="0" width="1076" height="18" uuid="4e09d167-3575-46eb-8f46-90a81c4c1b05"/>
+					<box leftPadding="2" rightPadding="2"/>
+					<textElement verticalAlignment="Middle" markup="styled">
+						<font fontName="Tahoma" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NOMBRE_GRUPO}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="18">
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement mode="Opaque" x="336" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="b280a198-24fc-4a9e-97cb-e419e7429674"/>
+					<box leftPadding="2" rightPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalCapital}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement mode="Opaque" x="410" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="defa8e7c-c624-486b-882d-d2d76982c849"/>
+					<box leftPadding="2" rightPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalReservaLegal}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement mode="Opaque" x="484" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="2507a12e-d22f-4ae0-9d59-09668000dd13"/>
+					<box leftPadding="2" rightPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalReevaluacion}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement mode="Opaque" x="558" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="b95bb59e-4fa2-498d-95a5-1e914179494c"/>
+					<box leftPadding="2" rightPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalOtrasReservas}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement mode="Opaque" x="632" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="de4aeaee-586f-413a-bf8d-3c4fee9e4aa4"/>
+					<box leftPadding="2" rightPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalOtrasVariaciones}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement mode="Opaque" x="706" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="93bd51ab-5f27-40ce-b92c-330e24f7a51c"/>
+					<box leftPadding="2" rightPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalAcumulados}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement mode="Opaque" x="780" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="af547004-224a-4d31-af95-5ed7a065c9b6"/>
+					<box leftPadding="2" rightPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalCapital}+$V{totalReservaLegal}+$V{totalReevaluacion}+$V{totalOtrasReservas}+$V{totalOtrasVariaciones}+$V{totalAcumulados}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement mode="Opaque" x="854" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="e8398033-1af3-42a9-9842-021f90ef957c"/>
+					<box leftPadding="2" rightPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalIntereses1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement mode="Opaque" x="928" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="2526c9eb-6b62-46f5-99fe-8f36fe979c16"/>
+					<box leftPadding="2" rightPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalIntereses2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement mode="Opaque" x="1002" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="766b77fc-2d75-48f6-b991-84640dc5fe68"/>
+					<box leftPadding="2" rightPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalCapital}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="336" height="18" uuid="f3f9905a-38a1-4942-aa62-b02ab88c8c6f"/>
+					<box leftPadding="2" rightPadding="2">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle" markup="styled">
+						<font fontName="Tahoma" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{GRUPO} > 0 ? "Totales de :"+$F{NOMBRE_GRUPO} : "Saldos Iniciales"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="1076" height="20" uuid="b028739e-c6cd-4a92-9f01-2963f6655a87"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MINISTERIO DE HACIENDA"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="1076" height="20" uuid="3efbbff7-d239-43e4-b40f-5a23f3dceda0"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ESTADO DE CAMBIOS EN EL PATRIMONIO"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="40" width="1076" height="20" uuid="f8c5bd69-1308-44d4-8afb-639fdb3f197e"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["- AL 31 DE DICIEMBRE DE 2016 -"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="308" height="30" uuid="fa2d8b83-feb5-4147-8090-97e612e5a556"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[Concepto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="308" y="0" width="28" height="30" uuid="69414083-42f7-4ccb-9e53-93cdc5f1ced8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[Nota No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="0" width="74" height="30" uuid="fe89a6bb-34e1-423b-904e-11a64b8b8db4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[Reserva Por Disposiciones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="484" y="0" width="74" height="30" uuid="e39273dc-770f-4fbf-853f-1d058cafdd65"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[Reevaluacion de Bienes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="336" y="0" width="74" height="30" uuid="69815720-1f34-4b44-97b0-559d6914f3a1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[Capital]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="558" y="0" width="74" height="30" uuid="3e157437-2459-4c4f-8cbd-f4a428549b30"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[Otras Reservas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="706" y="0" width="74" height="30" uuid="6a013afc-649b-4234-aaeb-3d828549442d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[Resul. Acumula.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="632" y="0" width="74" height="30" uuid="13282781-75f5-42a4-b1f1-5799922fa708"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[Otras Variaciones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="780" y="0" width="74" height="30" uuid="b07bf652-9270-46d5-8d5d-7626f028b5d6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[Totales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="854" y="0" width="74" height="30" uuid="c6974c73-d6ef-4f4b-85c4-9a759eb25065"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[Interese Minoritarios]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="928" y="0" width="74" height="30" uuid="5e1c8129-5b6d-4a20-a187-ed62e67d6c1d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[Interese Minoritarios Evolucion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1002" y="0" width="74" height="30" uuid="4e2fbb8a-243b-4b3e-a2b6-3cd01bec38c5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<text><![CDATA[Total patrimonio]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{GRUPO} != 0]]></printWhenExpression>
+			<textField>
+				<reportElement x="0" y="0" width="308" height="18" uuid="933c4631-c3b6-4c54-8939-7ac821108ef7"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement verticalAlignment="Middle" markup="styled">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="336" y="0" width="74" height="18" uuid="a0b8769e-20db-415c-94e3-7e205a20eff7"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CAPITAL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="410" y="0" width="74" height="18" uuid="8ae5e7a3-7e0d-4e45-8ae3-ef26ef5628bc"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RESERVA_LEGALES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="484" y="0" width="74" height="18" uuid="25652f40-2f9d-4c45-a8dc-ea347523d882"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{REEVALUACION_BIENES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="558" y="0" width="74" height="18" uuid="2c69acda-5878-4dbf-8048-13e1155e12b7"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OTRAS_RESERVAS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="632" y="0" width="74" height="18" uuid="211d725e-0c92-49cf-9ab8-29e84ca89fba"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OTRAS_VARIACIONES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="706" y="0" width="74" height="18" uuid="c9b5d0bb-b61d-470c-9528-7d92ebc527f9"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ACUMULADOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="854" y="0" width="74" height="18" uuid="268d7191-8eb9-4b5b-99ed-b3972c1093cc"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INTERESES_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="928" y="0" width="74" height="18" uuid="e358b7ae-36c3-453d-bd5c-81e5a6a5f13b"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INTERESES_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="780" y="0" width="74" height="18" uuid="1c629a50-7a2c-443f-9013-e39b57bc639e"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CAPITAL}+$F{RESERVA_LEGALES}+$F{REEVALUACION_BIENES}+$F{OTRAS_RESERVAS}+$F{OTRAS_VARIACIONES}+$F{ACUMULADOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement x="1002" y="0" width="74" height="18" uuid="eebd1ee5-a93b-49f5-9933-71f4d859df37"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CAPITAL}+$F{RESERVA_LEGALES}+$F{REEVALUACION_BIENES}+$F{OTRAS_RESERVAS}+$F{OTRAS_VARIACIONES}+$F{ACUMULADOS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="39" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="18" splitType="Stretch">
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement mode="Opaque" x="632" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="c813a838-5fe9-4a56-ae65-2092a7499487"/>
+				<box leftPadding="2" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalOtrasVariaciones}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement mode="Opaque" x="410" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="f064ab8c-6639-47aa-83e6-1de4d77635ff"/>
+				<box leftPadding="2" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalReservaLegal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement mode="Opaque" x="706" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="2be731be-7111-475a-af40-a8946bf11383"/>
+				<box leftPadding="2" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalAcumulados}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement mode="Opaque" x="336" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="6b53fc59-5b3f-4c70-b27d-cdedf8e08d0d"/>
+				<box leftPadding="2" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalCapital}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement mode="Opaque" x="1002" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="9a9e04ba-1f6c-4f41-bece-b7611fdf91c7"/>
+				<box leftPadding="2" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalCapital}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement mode="Opaque" x="484" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="b9cc5a13-7a78-49a8-9980-11a6af3428cf"/>
+				<box leftPadding="2" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalReevaluacion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement mode="Opaque" x="854" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="f6452c80-a342-4ec2-88d4-d8e9840ee198"/>
+				<box leftPadding="2" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalIntereses1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement mode="Opaque" x="558" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="830b2197-f653-457d-96c9-59777ad4fcf2"/>
+				<box leftPadding="2" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalOtrasReservas}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement mode="Opaque" x="780" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="f1d64243-033f-472e-8d90-b7d9a4af3d91"/>
+				<box leftPadding="2" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalCapital}+$V{totalReservaLegal}+$V{totalReevaluacion}+$V{totalOtrasReservas}+$V{totalOtrasVariaciones}+$V{totalAcumulados}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement mode="Opaque" x="928" y="0" width="74" height="18" backcolor="#DAD9D9" uuid="002a61a9-6a33-4853-b0b3-e5ac0f2f12fa"/>
+				<box leftPadding="2" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalIntereses2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="336" height="18" uuid="c3c961c0-0f6c-41a4-9221-66cf62eeaea2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldos Finales:]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

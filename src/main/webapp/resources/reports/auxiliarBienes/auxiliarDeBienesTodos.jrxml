@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="auxiliarDeBienesTodos" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3dac632b-009b-4ead-a47f-04a5a75e8adb">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="consulta" uuid="6f56a2db-c51c-4bfe-bf50-9f22db3a1e4f">
+		<queryString>
+			<![CDATA[SELECT CLASE_BIEN, CODIGO_INVENTARIO, SELECCION_BIEN, ESTADO, COSTO_TOTAL, MONTO_DEPRECIAR,
+SALDO_REVALUO, MEJORAS, DETERIORO, DEPRECIACION_ACUMULADA, SALDO_LIBROS
+FROM VIEW_TC_AUXILIAR_BIENES
+WHERE ESTADO != 'Baja'
+ORDER BY SK_BIENES_ALTAS]]>
+		</queryString>
+		<field name="CLASE_BIEN" class="java.lang.String"/>
+		<field name="CODIGO_INVENTARIO" class="java.lang.String"/>
+		<field name="SELECCION_BIEN" class="java.lang.String"/>
+		<field name="ESTADO" class="java.lang.String"/>
+		<field name="COSTO_TOTAL" class="java.math.BigDecimal"/>
+		<field name="MONTO_DEPRECIAR" class="java.math.BigDecimal"/>
+		<field name="SALDO_REVALUO" class="java.math.BigDecimal"/>
+		<field name="MEJORAS" class="java.math.BigDecimal"/>
+		<field name="DETERIORO" class="java.math.BigDecimal"/>
+		<field name="DEPRECIACION_ACUMULADA" class="java.math.BigDecimal"/>
+		<field name="SALDO_LIBROS" class="java.math.BigDecimal"/>
+	</subDataset>
+	<parameter name="institucion" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT CONCAT(
+(SELECT CONCAT(
+(SELECT CONCAT((SELECT EXTRACT (DAY FROM SYSDATE) FROM DUAL),'/') dia FROM DUAL),
+(SELECT CONCAT((SELECT EXTRACT (MONTH FROM SYSDATE) FROM DUAL),'/') MES FROM DUAL)
+)FROM DUAL
+), (SELECT CONCAT((SELECT EXTRACT (YEAR FROM SYSDATE) FROM DUAL),'') anio FROM DUAL)
+) FECHA FROM DUAL]]>
+	</queryString>
+	<field name="FECHA" class="java.lang.String"/>
+	<pageHeader>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="752" height="15" uuid="4a93cff5-62ed-460c-8489-befeeb80acc3"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{institucion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="15" width="752" height="15" uuid="5b734f97-7a02-4f7a-a12b-2ab500326b61"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[AUXILIAR DE BIENES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="30" width="752" height="15" uuid="e4e1ecd1-4ea8-45fd-9c03-bca44c707fe6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DETALLE DE CONTROL CONTABLE DE ACTIVO FIJO]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="45" width="752" height="15" uuid="18b78bf4-8d6e-4d22-a29d-b487a9a79dc3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["GENERADO AL "+$F{FECHA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="492" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table 1" style="table 1" isPrintRepeatedValues="false" x="0" y="0" width="752" height="492" uuid="ba3e5bfe-3527-49dd-9985-383b0c7f9700"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="consulta" uuid="f9e8c32b-818e-45b7-a40a-253221144789">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="75" uuid="c70ced2f-b7c4-4030-98b7-7bf3414e2d4d">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="75" height="30" uuid="21cbd271-1fd7-44de-85ae-a8da6d1ddc7d"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[CLASE DE BIEN]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="40" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="75" height="40" uuid="bcd961b8-120e-47ba-bea4-f93879de75cd"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{CLASE_BIEN}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="75" uuid="a50f622b-7cc4-42c5-896e-602b81cf5b43">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="75" height="30" uuid="7a4a6d0c-c6d9-4401-89a6-106b2feb4454"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[NUMERO DE INVENTARIO]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="40" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="75" height="40" uuid="31ae1ce3-f8cb-4fd4-af87-ac0e990061b5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{CODIGO_INVENTARIO}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="75" uuid="6b2669d1-72ec-45a6-8809-063630da194c">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="75" height="30" uuid="4ae0ff8e-5af5-4258-9a5e-b26be6f9dc3c"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[SELECCIÓN DEL BIEN]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="40" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="75" height="40" uuid="e3aa2628-b5c5-43da-b281-a7d352cefdf2"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{SELECCION_BIEN}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="75" uuid="cba2f1c8-b42a-48d7-8fdf-6457bef0d016">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="75" height="30" uuid="a3b2cacc-ea8d-46bc-9147-23ead8f4550b"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[COSTO TOTAL DEL BIEN]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="40" rowSpan="1">
+							<textField pattern=" $#,##0.00">
+								<reportElement x="0" y="0" width="75" height="40" uuid="f590ac69-5085-459d-bf8e-19d7fded26a5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{COSTO_TOTAL}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="75" uuid="b06c896a-a5cf-447b-842e-d896ee838a62">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="75" height="30" uuid="3622b424-4893-4690-8119-2506b0423b18"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[MONTO A DEPRECIAR]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="40" rowSpan="1">
+							<textField pattern=" $#,##0.00">
+								<reportElement x="0" y="0" width="75" height="40" uuid="f3183bd8-495a-4a8b-914c-cf8f53e6c746"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{MONTO_DEPRECIAR}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="75" uuid="9bcb9299-e905-4d70-8f15-51ab07b904bb">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="75" height="30" uuid="bff142a9-a562-4009-a0f8-9909d98c4d8a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[REVALUACIONES]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="40" rowSpan="1">
+							<textField pattern=" $#,##0.00">
+								<reportElement x="0" y="0" width="75" height="40" uuid="8f8d3502-838d-47fd-adc3-32604462eaeb"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{SALDO_REVALUO}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="75" uuid="e19834e6-cadb-445c-ae07-90c08794ed60">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="75" height="30" uuid="a84af918-e23b-4963-8dc6-1c853b3a60fc"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[MEJORAS]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="40" rowSpan="1">
+							<textField pattern=" $#,##0.00">
+								<reportElement x="0" y="0" width="75" height="40" uuid="5b570650-1885-49d3-82a5-dec8b9e195a6"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{MEJORAS}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="75" uuid="ac17d96d-d41f-4d1b-887e-d17b31f7ee1f">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="75" height="30" uuid="c28f2ea0-c72d-4678-94ff-f4ef6d353809"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[DETERIORO]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="40" rowSpan="1">
+							<textField pattern=" $#,##0.00">
+								<reportElement x="0" y="0" width="75" height="40" uuid="898e78a7-a035-446e-b5c8-3fbd63cc0ba2"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{DETERIORO}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="75" uuid="95426d8e-3a11-4427-ac70-71149d8b3ddc">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="75" height="30" uuid="43e3bf1f-b0a9-48cd-8ed1-54852ced61bf"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[DEPRECIACIÓN ACUMULADA]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="40" rowSpan="1">
+							<textField pattern=" $#,##0.00">
+								<reportElement x="0" y="0" width="75" height="40" uuid="0443eb26-4cc3-4225-8df1-b4152c6aefb5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{DEPRECIACION_ACUMULADA}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="75" uuid="6ed8ea1a-4b76-4665-9d86-b49f9caba726">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="75" height="30" uuid="381c2939-30f1-49a8-be55-944f8ef66f91"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[VALOR EN LIBROS]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="40" rowSpan="1">
+							<textField pattern=" $#,##0.00">
+								<reportElement x="0" y="0" width="75" height="40" uuid="474782ee-9df1-46cb-8ef1-d6221b2a19a7"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{SALDO_LIBROS}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="315" y="0" width="85" height="20" uuid="384c2cf5-7bdf-4082-a83d-205f3dbd2da5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="365" y="0" width="40" height="20" uuid="2d4fff44-bbfd-49ca-a335-2575215c92e5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEstadoSituacionFinanciera" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fac8473f-7a9b-4673-9061-8eaf9d21f531">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[select codigo, descripcion,
+       sum(saldo) as saldo,
+       sum(saldo_anterior) as saldo_anterior, nivel, nombre_institucion from (
+
+select d.codigo, d.descripcion,
+       case when (d.sk_tipo_cuenta = 1 or d.sk_tipo_cuenta = 5) then (sum(b.debe) - sum(b.haber)) else (sum(b.haber) - sum(b.debe)) end as saldo,
+       0 as saldo_anterior,
+
+       d.nivel, e.descripcion as nombre_institucion
+from tc_partida a, tc_partida_detalle b,
+     (select x.sk_cuenta_contable, CONNECT_BY_ROOT x.sk_cuenta_contable as sk_cuenta_padre, level as nivel from cc_catalogo_cuenta x CONNECT BY PRIOR x.sk_cuenta_contable = x.id_parent) c,
+     cc_catalogo_cuenta d, ci_institucion e
+where a.sk_partida = b.sk_partida
+and   b.sk_codigo_cuenta = c.sk_cuenta_contable
+and   c.sk_cuenta_padre = d.sk_cuenta_contable
+and   a.sk_institucion = e.sk_institucion
+and   d.nivel in (1,2,3)
+and   d.sk_tipo_cuenta in (4,5)
+and   a.sk_institucion = 1
+and   a.fecha_contable <= to_date('2016-06-30','yyyy-mm-dd')
+group by d.codigo, d.descripcion, c.nivel, d.nivel, d.sk_tipo_cuenta,e.descripcion
+
+union all
+
+select d.codigo, d.descripcion,
+       0 as saldo,
+       case when (d.sk_tipo_cuenta = 1 or d.sk_tipo_cuenta = 5) then (sum(b.debe) - sum(b.haber)) else (sum(b.haber) - sum(b.debe)) end as saldo_anterior,
+       d.nivel, e.descripcion as nombre_institucion
+from tc_partida a, tc_partida_detalle b,
+     (select x.sk_cuenta_contable, CONNECT_BY_ROOT x.sk_cuenta_contable as sk_cuenta_padre, level as nivel from cc_catalogo_cuenta x CONNECT BY PRIOR x.sk_cuenta_contable = x.id_parent) c,
+     cc_catalogo_cuenta d, ci_institucion e
+where a.sk_partida = b.sk_partida
+and   b.sk_codigo_cuenta = c.sk_cuenta_contable
+and   c.sk_cuenta_padre = d.sk_cuenta_contable
+and   a.sk_institucion = e.sk_institucion
+and   d.nivel in (1,2,3)
+and   d.sk_tipo_cuenta in (4,5)
+and   a.sk_institucion = 1
+and   a.fecha_contable <= to_date('2015-06-30','yyyy-mm-dd')
+group by d.codigo, d.descripcion, c.nivel, d.nivel, d.sk_tipo_cuenta,e.descripcion
+)
+group by codigo,descripcion,nivel,nombre_institucion
+order by codigo]]>
+	</queryString>
+	<field name="CODIGO" class="java.lang.String"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="SALDO" class="java.math.BigDecimal"/>
+	<field name="SALDO_ANTERIOR" class="java.math.BigDecimal"/>
+	<field name="NIVEL" class="java.math.BigDecimal"/>
+	<field name="NOMBRE_INSTITUCION" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="80" splitType="Stretch">
+			<textField>
+				<reportElement uuid="b028739e-c6cd-4a92-9f01-2963f6655a87" x="0" y="0" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_INSTITUCION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="3efbbff7-d239-43e4-b40f-5a23f3dceda0" x="0" y="20" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ESTADO DE SITUACION FINANCIERA"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f8c5bd69-1308-44d4-8afb-639fdb3f197e" x="0" y="40" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["- AL 31 DE DICIEMBRE DE 2016 -"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="fa2d8b83-feb5-4147-8090-97e612e5a556" x="0" y="0" width="66" height="20"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[CODIGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="69414083-42f7-4ccb-9e53-93cdc5f1ced8" x="66" y="0" width="278" height="20"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[DESCRIPCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fe89a6bb-34e1-423b-904e-11a64b8b8db4" x="401" y="0" width="77" height="20"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[Ejercicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e39273dc-770f-4fbf-853f-1d058cafdd65" x="478" y="0" width="77" height="20"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[Ejercicio - 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="69815720-1f34-4b44-97b0-559d6914f3a1" x="344" y="0" width="57" height="20"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<text><![CDATA[No.Nota]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="76476a7b-beba-4dc3-ab47-4bace6fa63c7" x="0" y="0" width="555" height="20" backcolor="#EAEAEA">
+					<printWhenExpression><![CDATA[$F{NIVEL} == 2]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="a5bdb4dd-fb07-4db7-a624-a294cc293f69" x="0" y="0" width="555" height="20" backcolor="#CCCCCC">
+					<printWhenExpression><![CDATA[$F{NIVEL} == 1]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement uuid="933c4631-c3b6-4c54-8939-7ac821108ef7" x="0" y="0" width="66" height="20"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement verticalAlignment="Middle" markup="styled">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CODIGO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ed56bfbc-be18-48c8-8f4c-03ef1b28eef8" x="66" y="0" width="278" height="20"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement verticalAlignment="Middle" markup="styled">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement uuid="30fef24e-44c2-4cb2-bc29-4c7678c129a7" x="401" y="0" width="77" height="20"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="styled">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SALDO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)">
+				<reportElement uuid="6dabd62d-ea6d-4c72-98bf-bfad2bcee481" x="478" y="0" width="77" height="20"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="styled">
+					<font fontName="Tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SALDO_ANTERIOR}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
