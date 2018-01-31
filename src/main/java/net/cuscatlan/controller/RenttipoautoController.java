@@ -44,8 +44,7 @@ public class RenttipoautoController {
     }
     
     @RequestMapping(value = "/saveRenttipoauto", method = RequestMethod.POST)
-    public @ResponseBody String saveRenttipoauto(@ModelAttribute("Renttipoauto") @Validated Renttipoauto renttipoauto ) {
-       
+    public @ResponseBody String saveRenttipoauto(@ModelAttribute("Renttipoauto") @Validated Renttipoauto renttipoauto ) {       
          renttipoautoRepository.save(renttipoauto);
          return null;
      }

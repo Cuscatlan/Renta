@@ -57,41 +57,14 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label"></label>
+                                        <label class="col-sm-2 control-label">AUTO:</label>
                                         <div class="col-lg-10">
 
                                             <jf:combobox url="/AutosRent/cbofilterRentauto"   id="rentautoDelegate"  name="rentauto.idauto" />
                                         </div>
                                     </div>
-                                        
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">IDCLIENTE</label>
-                                        <div class="col-lg-10">
-
-                                            <jf:combobox url="/AutosRent/cbofilterRentcliente"   id="rentclienteDelegate"  name="rentcliente.idcliente" />
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">IDTIPOTRANSACCION</label>
-                                        <div class="col-lg-10">
-
-                                            <jf:combobox url="/AutosRent/cbofilterRenttipotransaccion"   id="renttipotransaccionDelegate"  name="renttipotransaccion.idtipotransaccion" />
-                                        </div>
-                                    </div>
-
                                    
-
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">IDVENDEDOR</label>
-                                        <div class="col-lg-10">
-
-                                            <jf:combobox url="/AutosRent/cbofilterRentvendedor"   id="rentvendedorDelegate"  name="rentvendedor.idvendedor" />
-                                        </div>
-                                    </div>
-
-                                        
-                                        
+                                      
                                 </div>
                                         
                                 <div class="panel-footer text-right">

@@ -24,8 +24,8 @@
                 <!-- Page content-->
                 <div class="content-wrapper">
                     <div class="row">
-                        <h3>Rentpersona
-                            <small> page</small>
+                        <h3>Registro de persona
+                            <small> Listado</small>
                         </h3>
                         <div class="jqgrid-responsive mb-lg">
                             <jf:grid urlgrid="${urlgridRentpersona}" 

@@ -26,70 +26,71 @@
                 <!-- END user info-->
                 <!-- Iterates over all sidebar items-->
                 <li class="nav-heading ">
-                    <span data-localize="sidebar.heading.COMPONENTS">Components</span>
+                    <span data-localize="sidebar.heading.COMPONENTS">Componentes</span>
                 </li>
                 <li class=" ">
                     <a href="#forms" title="Forms" data-toggle="collapse">
                         <em class="icon-note"></em>
-                        <span data-localize="sidebar.nav.form.FORM">Forms</span>
+                        <span data-localize="sidebar.nav.form.FORM">Menu</span>
                     </a>
                     <ul id="forms" class="nav sidebar-subnav collapse">
-                        <li class="sidebar-subnav-header">Forms</li>
+                        <li class="sidebar-subnav-header">Menu</li>
                         <li class=" ">
                             <a href="${pageContext.request.contextPath}/indexcotizacion" title="Wizard">
                                 <span>Cotizar Renta</span>
                             </a>
                         </li>
                         <li class=" ">
+                            <a href="${pageContext.request.contextPath}/indexRenttipoauto" title="Wizard">
+                                <span>Tipos de Auto</span>
+                            </a>
+                        </li>
+                        <li class=" ">
                             <a href="${pageContext.request.contextPath}/indexRentauto" title="Wizard">
-                                <span>Rentauto</span>
-                            </a>
-                        </li>
-                        <li class=" ">
-                            <a href="${pageContext.request.contextPath}/indexRentcliente" title="Wizard">
-                                <span>Rentcliente</span>
-                            </a>
-                        </li>
-                        <li class=" ">
-                            <a href="${pageContext.request.contextPath}/indexRentdireccion" title="Wizard">
-                                <span>Rentdireccion</span>
+                                <span>Autos</span>
                             </a>
                         </li>
                         <li class=" ">
                             <a href="${pageContext.request.contextPath}/indexRentpersona" title="Wizard">
-                                <span>Rentpersona</span>
+                                <span>Datos Personales</span>
                             </a>
                         </li>
                         <li class=" ">
-                            <a href="${pageContext.request.contextPath}/indexRenttelefono" title="Wizard">
-                                <span>Renttelefono</span>
+                            <a href="${pageContext.request.contextPath}/indexRentcliente" title="Wizard">
+                                <span>Datos adicionales para clientes</span>
                             </a>
                         </li>
-                        <li class=" ">
-                            <a href="${pageContext.request.contextPath}/indexRenttipoauto" title="Wizard">
-                                <span>Renttipoauto</span>
-                            </a>
-                        </li>
-                        <li class=" ">
-                            <a href="${pageContext.request.contextPath}/indexRenttipotransaccion" title="Wizard">
-                                <span>Renttipotransaccion</span>
-                            </a>
-                        </li>
-                        <li class=" ">
-                            <a href="${pageContext.request.contextPath}/indexRenttransaccion" title="Wizard">
-                                <span>Renttransaccion</span>
+                         <li class=" ">
+                            <a href="${pageContext.request.contextPath}/indexRentvendedor" title="Wizard">
+                                <span>Datos Adicionales para vendedores</span>
                             </a>
                         </li>
                         <li class=" ">
                             <a href="${pageContext.request.contextPath}/indexRentusuarios" title="Wizard">
-                                <span>Rentusuarios</span>
+                                <span>Datos adicionales de usuarios</span>
+                            </a>
+                        </li>                       
+                        <li class=" ">
+                            <a href="${pageContext.request.contextPath}/indexRentdireccion" title="Wizard">
+                                <span>Direccion</span>
                             </a>
                         </li>
                         <li class=" ">
-                            <a href="${pageContext.request.contextPath}/indexRentvendedor" title="Wizard">
-                                <span>Rentvendedor</span>
+                            <a href="${pageContext.request.contextPath}/indexRenttelefono" title="Wizard">
+                                <span>Telefonos</span>
                             </a>
                         </li>
+                        <li class=" ">
+                            <a href="${pageContext.request.contextPath}/indexRenttipotransaccion" title="Wizard">
+                                <span>Tipos de Tramite</span>
+                            </a>
+                        </li>
+                        <li class=" ">
+                            <a href="${pageContext.request.contextPath}/indexRenttransaccion" title="Wizard">
+                                <span>Tramite</span>
+                            </a>
+                        </li>
+                        
                     </ul>
                 </li>
             </ul>

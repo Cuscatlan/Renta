@@ -59,17 +59,16 @@
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <div class="form-group">
-                                         <!--<label class="col-sm-2 control-label">IDTIPOAUTO</label>
+                                        <!--<label class="col-sm-2 control-label">IDTIPOAUTO</label>
                                          <div class="col-lg-10">
-
-                                         <jf:numberbox  precision="10"    id="idtipoauto" name="idtipoauto"  required="true" />  -->
-                                         </div>
+                                         <jf:numberbox  precision="10"    id="idtipoauto" name="idtipoauto"  required="true" />  
+                                         </div>-->
+                                          <input type="hidden" id="idtipoauto" name="idtipoauto">
                                      </div>
  
                                     <div class="form-group">
-                                         <label class="col-sm-2 control-label">TIPOAUTOS</label>
+                                         <label class="col-sm-2 control-label">TIPO</label>
                                          <div class="col-lg-10">
-
                                          <jf:textbox  tabindex="1" maxlength="15"   id="tipoautos" name="tipoautos" />
                                          </div>
                                      </div>

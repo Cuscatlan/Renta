@@ -24,11 +24,11 @@ public interface RentautoRepository extends JpaRepository <Rentauto,    Integer 
             + " and (:modeloauto is null or LOWER(x.modeloauto) LIKE LOWER(CONCAT('%',:modeloauto ,'%')))   "
             + " and (:placaauto is null or LOWER(x.placaauto) LIKE LOWER(CONCAT('%',:placaauto ,'%')))   "
             + " and (:targetaauto is null or LOWER(x.targetaauto) LIKE LOWER(CONCAT('%',:targetaauto ,'%')))   "
-            + " and  (:fkidtipoautorenttipoauto is null or :fkidtipoautorenttipoauto = x.renttipoauto.idtipoauto) "
+            + " and  (:fkidtipoautorenttipoauto is null or :fkidtipoautorenttipoauto = x.renttipoauto.tipoautos) "
             + " ORDER BY x.idauto ASC ")
      Page<Rentauto> findByFilters(Pageable page  ,@Param("idauto")  String idauto ,@Param("fechaauto")  String fechaauto ,@Param("preciodiaauto")  String preciodiaauto ,@Param("colorauto")  String colorauto ,@Param("modeloauto")  String modeloauto ,@Param("placaauto")  String placaauto ,@Param("targetaauto")  String targetaauto ,@Param("fkidtipoautorenttipoauto")  String fkidtipoautorenttipoauto);
 
-    @Query(value ="SELECT  x.IDAUTO  ,  x.FECHAAUTO  ,  x.PRECIODIAAUTO  ,  x.COLORAUTO  ,  x.MODELOAUTO  ,  x.PLACAAUTO  ,  x.TARGETAAUTO  ,  x.IDTIPOAUTO  "
+    @Query(value ="SELECT  x.IDAUTO  ,  x.FECHAAUTO  ,  x.PRECIODIAAUTO  ,  x.COLORAUTO  ,  x.MODELOAUTO  ,  x.PLACAAUTO  ,  x.TARGETAAUTO  ,  x.TIPOAUTOS  "
             + " FROM RENTAUTO x "
             + "WHERE"  
             + "  (:idauto is null or :idauto = x.IDAUTO )   "
@@ -38,7 +38,7 @@ public interface RentautoRepository extends JpaRepository <Rentauto,    Integer 
             + " and (:modeloauto is null or LOWER(x.MODELOAUTO) LIKE LOWER('%' || :modeloauto || '%'))   "
             + " and (:placaauto is null or LOWER(x.PLACAAUTO) LIKE LOWER('%' || :placaauto || '%'))   "
             + " and (:targetaauto is null or LOWER(x.TARGETAAUTO) LIKE LOWER('%' || :targetaauto || '%'))   "
-            + " and  (:fkidtipoautorenttipoauto is null or :fkidtipoautorenttipoauto = x.IDTIPOAUTO) "
+            + " and  (:fkidtipoautorenttipoauto is null or :fkidtipoautorenttipoauto = x.TIPOAUTOS) "
             + " ORDER BY x.IDAUTO ASC ",nativeQuery=true)
      List<Object[]> findByFilters( @Param("idauto")  String idauto ,@Param("fechaauto")  String fechaauto ,@Param("preciodiaauto")  String preciodiaauto ,@Param("colorauto")  String colorauto ,@Param("modeloauto")  String modeloauto ,@Param("placaauto")  String placaauto ,@Param("targetaauto")  String targetaauto ,@Param("fkidtipoautorenttipoauto")  String fkidtipoautorenttipoauto);
 

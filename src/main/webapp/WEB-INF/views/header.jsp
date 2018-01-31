@@ -5,10 +5,10 @@
         <div class="navbar-header">
             <a href="#/" class="navbar-brand">
                 <div class="brand-logo">
-                    <img src="resources/img/logo.png" alt="App Logo" class="img-responsive">
+                    <img src="resources/img/Azul-Logo.PNG" alt="App Logo" class="img-responsive">
                 </div>
                 <div class="brand-logo-collapsed">
-                    <img src="resources/img/logo-single.png" alt="App Logo" class="img-responsive">
+                    <img src="resources/img/Azul-logo-single.png" alt="App Logo" class="img-responsive">
                 </div>
             </a>
         </div>
