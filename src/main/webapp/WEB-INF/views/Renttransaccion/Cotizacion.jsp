@@ -63,10 +63,19 @@
                                             <jf:combobox url="/AutosRent/cbofilterRentauto"   id="rentautoDelegate"  name="rentauto.idauto" />
                                         </div>
                                     </div>
-                                   
-                                      
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">TOTAL:</label>
+                                        <div class="col-lg-10">
+                                            <c:set var = "Monto" scope = "session" value = "${Total}"/>
+                                            <c:if test = "${Monto >= 0}">
+                                                <p>  <c:out value = "${Monto}"/><p>
+                                                </c:if>
+
+                                        </div>
+                                    </div>
+
                                 </div>
-                                        
+
                                 <div class="panel-footer text-right">
                                     <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
                                     <button type="submit" class="btn btn-">Run validation</button>

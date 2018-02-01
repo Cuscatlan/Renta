@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import net.cuscatlan.common.CboFilter;
 import java.util.Date;
+import net.cuscatlan.domain.Rentauto;
+import net.cuscatlan.repository.RentautoRepository;
 
 @Controller
 @RequestMapping("/")
@@ -34,6 +36,9 @@ public class RenttransaccionController {
 
     @Autowired
     RenttransaccionRepository renttransaccionRepository;
+
+    @Autowired
+    RentautoRepository rentAutoRepository;
 
     @RequestMapping("/indexRenttransaccion")
     public ModelAndView indexRenttransaccion() {
@@ -67,21 +72,23 @@ public class RenttransaccionController {
         Calendar cal2 = Calendar.getInstance();
         cal1.setTime(renttransaccion.getFechainiciotransaccion());
         cal2.setTime(renttransaccion.getFachefintransaccionr());
-        String preciodia = renttransaccion.getRentauto().getPreciodiaauto();
-        //float preciod = Float.parseFloat(preciodia);
-        //calculo que el anio sea el correcto.
+        Integer idauto = renttransaccion.getRentauto().getIdauto();
+        Rentauto auto = (Rentauto) rentAutoRepository.findOne(idauto);
+
         boolean correcto = false;
         Date fecha1 = renttransaccion.getFechainiciotransaccion();
         Date fecha2 = renttransaccion.getFechainiciotransaccion();
-        if (renttransaccion.getFechainiciotransaccion().compareTo(renttransaccion.getFechainiciotransaccion())<0){
-      
-            System.out.println("fecha inicio:" + cal1.getTime() + " mayor que fecha fin:" + cal2.getTime());
-            int dias=(int) ((fecha2.getTime()-fecha1.getTime())/86400000);
- 
-		System.out.println("Hay "+dias+" dias de diferencia");
+        if (renttransaccion.getFechainiciotransaccion().compareTo(renttransaccion.getFechainiciotransaccion()) < 0) {           
+                System.out.println("fecha f:" + cal1.getTime() + " mayor que fecha fin:" + cal2.getTime());   
         }
-
-        mv.addObject("renttransaccion", new Renttransaccion());
+        int dias = (int) ((cal2.getTimeInMillis() - cal1.getTimeInMillis())/86400000);  
+         
+        System.out.println("Hay " + dias + " dias de diferencia");
+        
+        float total = dias*Float.parseFloat(auto.getPreciodiaauto());
+        
+        mv.addObject("renttransaccion", renttransaccion);
+        mv.addObject("Total",total);
         mv.setViewName("Renttransaccion/Cotizacion.jsp");
         return mv;
     }
